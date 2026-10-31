@@ -1046,3 +1046,253 @@ function limpiarJiCuadrada() {
     document.getElementById('tabla-jicuadrada').innerHTML = '';
     ocultarMensajesDist('ji');
 }
+// ============================================
+//  ██████  TEOREMA DEL LÍMITE CENTRAL  ██████
+// ============================================
+
+/**
+ * FUNCIÓN PRINCIPAL: CALCULAR TLC
+ * 
+ * El TLC establece que si X1, X2, ..., Xn son variables
+ * independientes con media μ y varianza σ², entonces:
+ * 
+ * Media muestral: X̄ ≈ Normal(μ, σ/√n) cuando n es grande
+ * Suma: ΣX ≈ Normal(n·μ, √n·σ) cuando n es grande
+ */
+function calcularTLC() {
+    ocultarMensajesDist('tlc');
+
+    const muInput = document.getElementById('tlc-mu').value;
+    const sigmaInput = document.getElementById('tlc-sigma').value;
+    const nInput = document.getElementById('tlc-n').value;
+    const xBarInput = document.getElementById('tlc-xbar').value;
+    const aInput = document.getElementById('tlc-a').value;
+    const bInput = document.getElementById('tlc-b').value;
+    const sumaInput = document.getElementById('tlc-suma').value;
+    const s1Input = document.getElementById('tlc-s1').value;
+    const s2Input = document.getElementById('tlc-s2').value;
+
+    // Validar μ
+    const mu = parseFloat(muInput);
+    if (isNaN(mu)) {
+        mostrarErrorDist('tlc', '"μ" (media poblacional) debe ser un número.');
+        return;
+    }
+
+    // Validar σ
+    const sigma = parseFloat(sigmaInput);
+    if (isNaN(sigma) || sigma <= 0) {
+        mostrarErrorDist('tlc', '"σ" (desviación poblacional) debe ser un número mayor que 0.');
+        return;
+    }
+
+    // Validar n
+    const n = parseInt(nInput);
+    if (isNaN(n) || n < 2) {
+        mostrarErrorDist('tlc', '"n" (tamaño de muestra) debe ser un entero ≥ 2.');
+        return;
+    }
+
+    // Validar x̄ (punto para media muestral)
+    const xBar = parseFloat(xBarInput);
+    if (isNaN(xBar)) {
+        mostrarErrorDist('tlc', '"x̄" (punto de la media muestral) debe ser un número.');
+        return;
+    }
+
+    // Validar a y b (intervalo para media muestral)
+    const a = parseFloat(aInput);
+    const b = parseFloat(bInput);
+    if (isNaN(a) || isNaN(b)) {
+        mostrarErrorDist('tlc', '"a" y "b" (intervalo de la media) deben ser números.');
+        return;
+    }
+    if (b <= a) {
+        mostrarErrorDist('tlc', `"b" (${b}) debe ser mayor que "a" (${a}).`);
+        return;
+    }
+
+    // Validar valores para la suma
+    const suma = parseFloat(sumaInput);
+    const s1 = parseFloat(s1Input);
+    const s2 = parseFloat(s2Input);
+    if (isNaN(suma) || isNaN(s1) || isNaN(s2)) {
+        mostrarErrorDist('tlc', 'Los valores de la suma deben ser números.');
+        return;
+    }
+    if (s2 <= s1) {
+        mostrarErrorDist('tlc', `"s2" (${s2}) debe ser mayor que "s1" (${s1}).`);
+        return;
+    }
+
+    // ============================================
+    // CÁLCULOS PARA LA MEDIA MUESTRAL X̄
+    // ============================================
+    const mediaXbar = mu;                    // E(X̄) = μ
+    const errorEstandar = sigma / Math.sqrt(n); // σ_X̄ = σ/√n
+
+    // Estandarización: z = (x̄ - μ) / (σ/√n)
+    const zXbar = (xBar - mu) / errorEstandar;
+    const zA = (a - mu) / errorEstandar;
+    const zB = (b - mu) / errorEstandar;
+
+    const pXbarIzq = cdfNormalEstandar(zXbar);
+    const pXbarDer = 1 - cdfNormalEstandar(zXbar);
+    const pXbarIntervalo = cdfNormalEstandar(zB) - cdfNormalEstandar(zA);
+
+    // ============================================
+    // CÁLCULOS PARA LA SUMA ΣX
+    // ============================================
+    const mediaSuma = n * mu;                    // E(ΣX) = n·μ
+    const sigmaSuma = Math.sqrt(n) * sigma;      // σ_ΣX = √n·σ
+
+    // Estandarización: z = (ΣX - n·μ) / (√n·σ)
+    const zSuma = (suma - mediaSuma) / sigmaSuma;
+    const zS1 = (s1 - mediaSuma) / sigmaSuma;
+    const zS2 = (s2 - mediaSuma) / sigmaSuma;
+
+    const pSumaIzq = cdfNormalEstandar(zSuma);
+    const pSumaDer = 1 - cdfNormalEstandar(zSuma);
+    const pSumaIntervalo = cdfNormalEstandar(zS2) - cdfNormalEstandar(zS1);
+
+    // ============================================
+    // MOSTRAR RESULTADOS - MEDIA MUESTRAL
+    // ============================================
+    const tablaMedia = document.getElementById('tabla-tlc-media');
+    tablaMedia.innerHTML = `
+        <tr><th>Medida</th><th>Valor</th></tr>
+        <tr><td>Media de X̄: E(X̄) = μ</td><td>${redondear(mediaXbar, 4)}</td></tr>
+        <tr style="background-color:#fef9e7;"><td><strong>Error estándar: σ/√n = ${sigma}/√${n}</strong></td><td><strong>${redondear(errorEstandar, 4)}</strong></td></tr>
+        <tr><td>z para x̄=${xBar}</td><td>${redondear(zXbar, 4)}</td></tr>
+        <tr><td>z para a=${a}</td><td>${redondear(zA, 4)}</td></tr>
+        <tr><td>z para b=${b}</td><td>${redondear(zB, 4)}</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(X̄ ≤ ${xBar})</strong></td><td><strong>${redondear(pXbarIzq, 6)}</strong> (${redondear(pXbarIzq*100, 2)}%)</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(X̄ ≥ ${xBar})</strong></td><td><strong>${redondear(pXbarDer, 6)}</strong> (${redondear(pXbarDer*100, 2)}%)</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(${a} ≤ X̄ ≤ ${b})</strong></td><td><strong>${redondear(pXbarIntervalo, 6)}</strong> (${redondear(pXbarIntervalo*100, 2)}%)</td></tr>
+    `;
+
+    // ============================================
+    // MOSTRAR RESULTADOS - SUMA
+    // ============================================
+    const tablaSuma = document.getElementById('tabla-tlc-suma');
+    tablaSuma.innerHTML = `
+        <tr><th>Medida</th><th>Valor</th></tr>
+        <tr><td>Media de ΣX: E(ΣX) = n·μ = ${n}×${mu}</td><td>${redondear(mediaSuma, 4)}</td></tr>
+        <tr><td>Desv. de ΣX: √n·σ = √${n}×${sigma}</td><td>${redondear(sigmaSuma, 4)}</td></tr>
+        <tr><td>z para ΣX=${suma}</td><td>${redondear(zSuma, 4)}</td></tr>
+        <tr><td>z para s1=${s1}</td><td>${redondear(zS1, 4)}</td></tr>
+        <tr><td>z para s2=${s2}</td><td>${redondear(zS2, 4)}</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(ΣX ≤ ${suma})</strong></td><td><strong>${redondear(pSumaIzq, 6)}</strong> (${redondear(pSumaIzq*100, 2)}%)</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(ΣX ≥ ${suma})</strong></td><td><strong>${redondear(pSumaDer, 6)}</strong> (${redondear(pSumaDer*100, 2)}%)</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(${s1} ≤ ΣX ≤ ${s2})</strong></td><td><strong>${redondear(pSumaIntervalo, 6)}</strong> (${redondear(pSumaIntervalo*100, 2)}%)</td></tr>
+    `;
+
+    document.getElementById('resultados-tlc').style.display = 'block';
+
+    // ============================================
+    // PROCEDIMIENTO
+    // ============================================
+    document.getElementById('proc-tlc').textContent =
+`TEOREMA DEL LÍMITE CENTRAL:
+Si X1, X2, ..., Xn son variables independientes con media μ y desviación σ,
+entonces para n suficientemente grande (n ≥ 30 como regla práctica):
+
+• La media muestral X̄ ≈ Normal(μ, σ/√n)
+• La suma ΣX ≈ Normal(n·μ, √n·σ)
+
+PARÁMETROS POBLACIONALES:
+μ = ${mu}, σ = ${sigma}, n = ${n}
+
+═══════════════════════════════════════
+SECCIÓN A: MEDIA MUESTRAL X̄
+═══════════════════════════════════════
+
+MEDIA DE X̄:
+E(X̄) = μ = ${mu}
+
+ERROR ESTÁNDAR (dispersión de X̄):
+σ_X̄ = σ/√n = ${sigma}/√${n} = ${sigma}/${redondear(Math.sqrt(n), 4)} = ${redondear(errorEstandar, 4)}
+
+ESTANDARIZACIÓN:
+z = (x̄ - μ) / (σ/√n)
+
+z(x̄=${xBar}) = (${xBar} - ${mu}) / ${redondear(errorEstandar, 4)} = ${redondear(zXbar, 4)}
+z(a=${a})    = (${a} - ${mu}) / ${redondear(errorEstandar, 4)} = ${redondear(zA, 4)}
+z(b=${b})    = (${b} - ${mu}) / ${redondear(errorEstandar, 4)} = ${redondear(zB, 4)}
+
+PROBABILIDADES:
+P(X̄ ≤ ${xBar}) = Φ(${redondear(zXbar, 4)}) = ${redondear(pXbarIzq, 6)}
+P(X̄ ≥ ${xBar}) = 1 - Φ(${redondear(zXbar, 4)}) = ${redondear(pXbarDer, 6)}
+P(${a} ≤ X̄ ≤ ${b}) = Φ(${redondear(zB, 4)}) - Φ(${redondear(zA, 4)}) = ${redondear(pXbarIntervalo, 6)}
+
+═══════════════════════════════════════
+SECCIÓN B: SUMA ΣX
+═══════════════════════════════════════
+
+MEDIA DE ΣX:
+E(ΣX) = n·μ = ${n} × ${mu} = ${redondear(mediaSuma, 4)}
+
+DESVIACIÓN ESTÁNDAR DE ΣX:
+σ_ΣX = √n · σ = ${redondear(Math.sqrt(n), 4)} × ${sigma} = ${redondear(sigmaSuma, 4)}
+
+ESTANDARIZACIÓN:
+z = (ΣX - n·μ) / (√n·σ)
+
+z(ΣX=${suma}) = (${suma} - ${redondear(mediaSuma, 4)}) / ${redondear(sigmaSuma, 4)} = ${redondear(zSuma, 4)}
+z(s1=${s1})   = (${s1} - ${redondear(mediaSuma, 4)}) / ${redondear(sigmaSuma, 4)} = ${redondear(zS1, 4)}
+z(s2=${s2})   = (${s2} - ${redondear(mediaSuma, 4)}) / ${redondear(sigmaSuma, 4)} = ${redondear(zS2, 4)}
+
+PROBABILIDADES:
+P(ΣX ≤ ${suma}) = Φ(${redondear(zSuma, 4)}) = ${redondear(pSumaIzq, 6)}
+P(ΣX ≥ ${suma}) = 1 - Φ(${redondear(zSuma, 4)}) = ${redondear(pSumaDer, 6)}
+P(${s1} ≤ ΣX ≤ ${s2}) = Φ(${redondear(zS2, 4)}) - Φ(${redondear(zS1, 4)}) = ${redondear(pSumaIntervalo, 6)}`;
+    document.getElementById('proc-tlc-seccion').style.display = 'block';
+
+    // ============================================
+    // INTERPRETACIÓN
+    // ============================================
+    document.getElementById('interp-tlc').textContent =
+`📊 INTERPRETACIÓN:\n\n` +
+`Se toman muestras de tamaño n = ${n} de una población con μ = ${mu} y σ = ${sigma}.\n\n` +
+`📌 SUPUESTOS DEL TLC:\n` +
+`• Las observaciones X1, X2, ..., Xn son independientes.\n` +
+`• Todas provienen de la misma distribución (misma μ y σ).\n` +
+`• n es suficientemente grande (regla práctica: n ≥ 30).\n` +
+`• No se requiere que la población sea normal.\n` +
+`• n actual = ${n}${n >= 30 ? ' ✓ (cumple n ≥ 30)' : ' ⚠️ (n < 30, la aproximación puede ser menos precisa si la población no es normal)'}\n\n` +
+`MEDIA MUESTRAL X̄:\n` +
+`• E(X̄) = ${mu} (las medias muestrales se centran en μ).\n` +
+`• Error estándar = ${redondear(errorEstandar, 4)} (dispersión de las medias muestrales).\n` +
+`• P(X̄ ≤ ${xBar}) = ${redondear(pXbarIzq*100, 2)}%\n` +
+`• P(${a} ≤ X̄ ≤ ${b}) = ${redondear(pXbarIntervalo*100, 2)}%\n\n` +
+`SUMA ΣX:\n` +
+`• E(ΣX) = ${redondear(mediaSuma, 4)}\n` +
+`• σ(ΣX) = ${redondear(sigmaSuma, 4)}\n` +
+`• P(ΣX ≤ ${suma}) = ${redondear(pSumaIzq*100, 2)}%\n` +
+`• P(${s1} ≤ ΣX ≤ ${s2}) = ${redondear(pSumaIntervalo*100, 2)}%\n\n` +
+`💡 CONCLUSIÓN: El TLC permite aproximar probabilidades de medias y sumas muestrales usando la Normal, incluso si la población original no es normal. Esto es fundamental en control de calidad, pruebas de rendimiento y análisis de sistemas.`;
+    document.getElementById('interp-tlc-seccion').style.display = 'block';
+}
+
+function cargarEjemploTLC() {
+    document.getElementById('tlc-mu').value = '200';
+    document.getElementById('tlc-sigma').value = '50';
+    document.getElementById('tlc-n').value = '36';
+    document.getElementById('tlc-xbar').value = '210';
+    document.getElementById('tlc-a').value = '190';
+    document.getElementById('tlc-b').value = '210';
+    document.getElementById('tlc-suma').value = '7500';
+    document.getElementById('tlc-s1').value = '7000';
+    document.getElementById('tlc-s2').value = '7500';
+    mostrarExitoDist('tlc', '✅ Ejemplo cargado: Tiempo de respuesta de un servidor (μ=200ms, σ=50ms). Muestra de n=36 solicitudes.');
+}
+
+function limpiarTLC() {
+    ['tlc-mu','tlc-sigma','tlc-n','tlc-xbar','tlc-a','tlc-b','tlc-suma','tlc-s1','tlc-s2'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('resultados-tlc').style.display = 'none';
+    document.getElementById('proc-tlc-seccion').style.display = 'none';
+    document.getElementById('interp-tlc-seccion').style.display = 'none';
+    document.getElementById('tabla-tlc-media').innerHTML = '';
+    document.getElementById('tabla-tlc-suma').innerHTML = '';
+    ocultarMensajesDist('tlc');
+}

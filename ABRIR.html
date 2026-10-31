@@ -981,8 +981,109 @@
                 <div id="interp-lognormal" class="mensaje-exito" style="display: block;"></div>
             </div>
         </div>
+       <!-- ============================================
+             MÓDULO 12: TEOREMA DEL LÍMITE CENTRAL
+           ============================================ -->
         <div id="modulo-tlc" class="modulo" style="display: none;">
-            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 6.</div>
+
+            <div class="info-dist">
+                <h4>📖 Definición</h4>
+                <p>Si X₁, X₂, ..., Xₙ son variables <strong>independientes e idénticamente distribuidas</strong> con media μ y varianza σ², entonces para n grande:</p>
+                <p>• La <strong>media muestral</strong> X̄ se aproxima a Normal(μ, σ/√n)</p>
+                <p>• La <strong>suma</strong> ΣX se aproxima a Normal(n·μ, √n·σ)</p>
+                <p><strong>No se requiere que la población sea normal.</strong></p>
+
+                <h4>✅ Supuestos del TLC</h4>
+                <ul>
+                    <li>Las observaciones son independientes entre sí</li>
+                    <li>Todas provienen de la misma distribución (misma μ y σ)</li>
+                    <li>n es suficientemente grande (regla práctica: n ≥ 30)</li>
+                    <li>Si la población ya es Normal, el TLC funciona para cualquier n</li>
+                </ul>
+
+                <h4>📐 Fórmulas</h4>
+                <div class="formula-box">
+                    <strong>Media muestral:</strong> E(X̄) = μ &nbsp;&nbsp;|&nbsp;&nbsp; Error estándar: σ_X̄ = σ/√n<br>
+                    <strong>Suma:</strong> E(ΣX) = n·μ &nbsp;&nbsp;|&nbsp;&nbsp; σ_ΣX = √n·σ<br>
+                    <strong>Estandarización media:</strong> z = (x̄ - μ) / (σ/√n)<br>
+                    <strong>Estandarización suma:</strong> z = (ΣX - n·μ) / (√n·σ)
+                </div>
+            </div>
+
+            <h3>📥 Parámetros poblacionales</h3>
+            <div class="campo-grupo">
+                <label for="tlc-mu">μ (media poblacional):</label>
+                <input type="number" id="tlc-mu" step="any" placeholder="Ej: 200">
+            </div>
+            <div class="campo-grupo">
+                <label for="tlc-sigma">σ (desviación poblacional):</label>
+                <input type="number" id="tlc-sigma" min="0.0001" step="any" placeholder="Ej: 50">
+                <small>Debe ser > 0</small>
+            </div>
+            <div class="campo-grupo">
+                <label for="tlc-n">n (tamaño de la muestra):</label>
+                <input type="number" id="tlc-n" min="2" step="1" placeholder="Ej: 36">
+                <small>Entero ≥ 2. Se recomienda n ≥ 30 para buena aproximación.</small>
+            </div>
+
+            <hr class="separador">
+            <h3>📊 Sección A: Probabilidades de la MEDIA MUESTRAL X̄</h3>
+            <div class="campo-grupo">
+                <label for="tlc-xbar">x̄ (punto de evaluación):</label>
+                <input type="number" id="tlc-xbar" step="any" placeholder="Ej: 210">
+                <small>Para P(X̄ ≤ x̄) y P(X̄ ≥ x̄)</small>
+            </div>
+            <div class="campo-grupo">
+                <label for="tlc-a">a (límite inferior del intervalo):</label>
+                <input type="number" id="tlc-a" step="any" placeholder="Ej: 190">
+            </div>
+            <div class="campo-grupo">
+                <label for="tlc-b">b (límite superior del intervalo):</label>
+                <input type="number" id="tlc-b" step="any" placeholder="Ej: 210">
+                <small>Para P(a ≤ X̄ ≤ b)</small>
+            </div>
+
+            <hr class="separador">
+            <h3>📊 Sección B: Probabilidades de la SUMA ΣX</h3>
+            <div class="campo-grupo">
+                <label for="tlc-suma">ΣX (punto de evaluación):</label>
+                <input type="number" id="tlc-suma" step="any" placeholder="Ej: 7500">
+                <small>Para P(ΣX ≤ s) y P(ΣX ≥ s)</small>
+            </div>
+            <div class="campo-grupo">
+                <label for="tlc-s1">s1 (límite inferior del intervalo):</label>
+                <input type="number" id="tlc-s1" step="any" placeholder="Ej: 7000">
+            </div>
+            <div class="campo-grupo">
+                <label for="tlc-s2">s2 (límite superior del intervalo):</label>
+                <input type="number" id="tlc-s2" step="any" placeholder="Ej: 7500">
+                <small>Para P(s1 ≤ ΣX ≤ s2)</small>
+            </div>
+
+            <div class="botones-accion">
+                <button class="btn-ejemplo" onclick="cargarEjemploTLC()">💡 Cargar Ejemplo</button>
+                <button class="btn-calcular" onclick="calcularTLC()">🧮 Calcular</button>
+                <button class="btn-limpiar" onclick="limpiarTLC()">🧹 Limpiar</button>
+            </div>
+
+            <div id="error-tlc" class="mensaje-error"></div>
+            <div id="exito-tlc" class="mensaje-exito"></div>
+
+            <div id="resultados-tlc" class="seccion-resultados">
+                <h3>📋 Resultados: Media Muestral X̄</h3>
+                <table id="tabla-tlc-media" class="tabla-resultados"></table>
+                <br>
+                <h3>📋 Resultados: Suma ΣX</h3>
+                <table id="tabla-tlc-suma" class="tabla-resultados"></table>
+            </div>
+            <div id="proc-tlc-seccion" class="seccion-resultados">
+                <h3>📝 Procedimiento (Estandarización)</h3>
+                <div id="proc-tlc" class="procedimiento"></div>
+            </div>
+            <div id="interp-tlc-seccion" class="seccion-resultados">
+                <h3>💬 Interpretación y Supuestos</h3>
+                <div id="interp-tlc" class="mensaje-exito" style="display: block;"></div>
+            </div>
         </div>
 
     </main>
