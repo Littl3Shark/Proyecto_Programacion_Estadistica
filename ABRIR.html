@@ -302,16 +302,208 @@
 
 
         <!-- ============================================
-             MÓDULOS 3-12 (Próximas fases)
+                    MÓDULOS 3-12 (Próximas fases)
+             ============================================ -->
+       <!-- ============================================
+                    MÓDULO 3: DISTRIBUCIÓN BINOMIAL
              ============================================ -->
         <div id="modulo-binomial" class="modulo" style="display: none;">
-            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 4.</div>
+
+            <div class="info-dist">
+                <h4>📖 Definición</h4>
+                <p>Modela el número de éxitos en <strong>n ensayos independientes</strong>, donde cada ensayo tiene solo dos resultados (éxito o fracaso) con probabilidad constante <strong>p</strong> de éxito.</p>
+                <p><strong>Variable aleatoria X:</strong> número de éxitos en n ensayos.</p>
+                <p><strong>Esperanza E(X):</strong> número promedio de éxitos esperados a largo plazo.</p>
+
+                <h4>✅ Supuestos</h4>
+                <ul>
+                    <li>Número fijo de ensayos (n)</li>
+                    <li>Cada ensayo tiene dos resultados: éxito o fracaso</li>
+                    <li>La probabilidad de éxito (p) es constante</li>
+                    <li>Los ensayos son independientes entre sí</li>
+                </ul>
+
+                <h4>📐 Fórmulas</h4>
+                <div class="formula-box">
+                    <strong>P(X=k)</strong> = C(n,k) × p^k × (1-p)^(n-k)<br>
+                    <strong>Media:</strong> μ = n·p &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Varianza:</strong> σ² = n·p·(1-p)
+                </div>
+            </div>
+
+            <h3>📥 Datos de entrada</h3>
+            <div class="campo-grupo">
+                <label for="bin-n">n (número de ensayos):</label>
+                <input type="number" id="bin-n" min="1" step="1" placeholder="Ej: 10">
+                <small>Entero ≥ 1</small>
+            </div>
+            <div class="campo-grupo">
+                <label for="bin-p">p (probabilidad de éxito):</label>
+                <input type="number" id="bin-p" min="0" max="1" step="0.01" placeholder="Ej: 0.95">
+                <small>Número entre 0 y 1</small>
+            </div>
+            <div class="campo-grupo">
+                <label for="bin-k">k (número de éxitos):</label>
+                <input type="number" id="bin-k" min="0" step="1" placeholder="Ej: 8">
+                <small>Entero entre 0 y n</small>
+            </div>
+
+            <div class="botones-accion">
+                <button class="btn-ejemplo" onclick="cargarEjemploBinomial()">💡 Cargar Ejemplo</button>
+                <button class="btn-calcular" onclick="calcularBinomial()">🧮 Calcular</button>
+                <button class="btn-limpiar" onclick="limpiarBinomial()">🧹 Limpiar</button>
+            </div>
+
+            <div id="error-binomial" class="mensaje-error"></div>
+            <div id="exito-binomial" class="mensaje-exito"></div>
+
+            <div id="resultados-binomial" class="seccion-resultados">
+                <h3>📋 Resultados</h3>
+                <table id="tabla-binomial" class="tabla-resultados"></table>
+            </div>
+            <div id="proc-binomial-seccion" class="seccion-resultados">
+                <h3>📝 Procedimiento</h3>
+                <div id="proc-binomial" class="procedimiento"></div>
+            </div>
+            <div id="interp-binomial-seccion" class="seccion-resultados">
+                <h3>💬 Interpretación</h3>
+                <div id="interp-binomial" class="mensaje-exito" style="display: block;"></div>
+            </div>
         </div>
-        <div id="modulo-hipergeometrica" class="modulo" style="display: none;">
-            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 4.</div>
-        </div>
+            <!-- ============================================
+                     MÓDULO 4: DISTRIBUCIÓN HIPERGEOMÉTRICA
+                 ============================================ -->
+            <div id="modulo-hipergeometrica" class="modulo" style="display: none;">
+
+                <div class="info-dist">
+                    <h4>📖 Definición</h4>
+                    <p>Modela el número de éxitos en una muestra de tamaño <strong>n</strong> extraída <strong>SIN reemplazo</strong> de una población finita de <strong>N</strong> elementos, de los cuales <strong>K</strong> son éxitos.</p>
+                    <p><strong>Variable aleatoria X:</strong> número de éxitos en la muestra.</p>
+                    <p><strong>Esperanza E(X):</strong> número esperado de éxitos en la muestra.</p>
+
+                    <h4>✅ Supuestos</h4>
+                    <ul>
+                        <li>Población finita de tamaño N</li>
+                        <li>La muestra se extrae SIN reemplazo</li>
+                        <li>Solo hay dos categorías: éxito y fracaso</li>
+                        <li>Se conocen N, K y n</li>
+                    </ul>
+
+                    <h4>📐 Fórmulas</h4>
+                    <div class="formula-box">
+                        <strong>P(X=k)</strong> = [C(K,k) × C(N-K, n-k)] / C(N,n)<br>
+                        <strong>Media:</strong> μ = n·K/N &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Varianza:</strong> σ² = n·(K/N)·(1-K/N)·(N-n)/(N-1)
+                    </div>
+                </div>
+
+                <h3>📥 Datos de entrada</h3>
+                <div class="campo-grupo">
+                    <label for="hiper-N">N (población total):</label>
+                    <input type="number" id="hiper-N" min="1" step="1" placeholder="Ej: 20">
+                    <small>Entero ≥ 1</small>
+                </div>
+                <div class="campo-grupo">
+                    <label for="hiper-K">K (éxitos en la población):</label>
+                    <input type="number" id="hiper-K" min="0" step="1" placeholder="Ej: 5">
+                    <small>Entero entre 0 y N</small>
+                </div>
+                <div class="campo-grupo">
+                    <label for="hiper-n">n (tamaño de la muestra):</label>
+                    <input type="number" id="hiper-n" min="1" step="1" placeholder="Ej: 4">
+                    <small>Entero entre 1 y N</small>
+                </div>
+                <div class="campo-grupo">
+                    <label for="hiper-k">k (éxitos observados):</label>
+                    <input type="number" id="hiper-k" min="0" step="1" placeholder="Ej: 1">
+                    <small>Entero válido para estos parámetros</small>
+                </div>
+
+                <div class="botones-accion">
+                    <button class="btn-ejemplo" onclick="cargarEjemploHipergeometrica()">💡 Cargar Ejemplo</button>
+                    <button class="btn-calcular" onclick="calcularHipergeometrica()">🧮 Calcular</button>
+                    <button class="btn-limpiar" onclick="limpiarHipergeometrica()">🧹 Limpiar</button>
+                </div>
+
+                <div id="error-hiper" class="mensaje-error"></div>
+                <div id="exito-hiper" class="mensaje-exito"></div>
+
+                <div id="resultados-hiper" class="seccion-resultados">
+                    <h3>📋 Resultados</h3>
+                    <table id="tabla-hiper" class="tabla-resultados"></table>
+                </div>
+                <div id="proc-hiper-seccion" class="seccion-resultados">
+                    <h3>📝 Procedimiento</h3>
+                    <div id="proc-hiper" class="procedimiento"></div>
+                </div>
+                <div id="interp-hiper-seccion" class="seccion-resultados">
+                    <h3>💬 Interpretación</h3>
+                    <div id="interp-hiper" class="mensaje-exito" style="display: block;"></div>
+                </div>
+            </div>
+       <!-- ============================================
+                      MÓDULO 5: DISTRIBUCIÓN POISSON
+           ============================================ -->
         <div id="modulo-poisson" class="modulo" style="display: none;">
-            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 4.</div>
+
+            <div class="info-dist">
+                <h4>📖 Definición</h4>
+                <p>Modela el número de eventos que ocurren en un <strong>intervalo fijo de tiempo o espacio</strong>, cuando los eventos son independientes y ocurren a una tasa promedio constante <strong>λ</strong>.</p>
+                <p><strong>Variable aleatoria X:</strong> número de eventos en el intervalo.</p>
+                <p><strong>Esperanza E(X):</strong> número promedio de eventos por intervalo.</p>
+
+                <h4>✅ Supuestos</h4>
+                <ul>
+                    <li>Los eventos son independientes entre sí</li>
+                    <li>La tasa promedio λ es constante en el intervalo</li>
+                    <li>Dos eventos no pueden ocurrir exactamente al mismo instante</li>
+                    <li>La probabilidad de un evento es proporcional al tamaño del intervalo</li>
+                </ul>
+
+                <h4>📐 Fórmulas</h4>
+                <div class="formula-box">
+                    <strong>P(X=k)</strong> = (λ^k × e^(-λ)) / k!<br>
+                    <strong>Media:</strong> μ = λ &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Varianza:</strong> σ² = λ &nbsp;&nbsp;(en Poisson son iguales)<br>
+                    <strong>Ajuste de intervalo:</strong> λ ajustada = λ base × t
+                </div>
+            </div>
+
+            <h3>📥 Datos de entrada</h3>
+            <div class="campo-grupo">
+                <label for="pois-lambda">λ (tasa promedio por intervalo unitario):</label>
+                <input type="number" id="pois-lambda" min="0.01" step="0.01" placeholder="Ej: 3">
+                <small>Número > 0. Ej: 3 errores por hora</small>
+            </div>
+            <div class="campo-grupo">
+                <label for="pois-intervalo">t (multiplicador del intervalo):</label>
+                <input type="number" id="pois-intervalo" min="0.01" step="0.01" placeholder="Ej: 1">
+                <small>Ej: 1 = una hora, 2 = dos horas, 0.5 = media hora</small>
+            </div>
+            <div class="campo-grupo">
+                <label for="pois-k">k (número de eventos):</label>
+                <input type="number" id="pois-k" min="0" step="1" placeholder="Ej: 5">
+                <small>Entero ≥ 0</small>
+            </div>
+
+            <div class="botones-accion">
+                <button class="btn-ejemplo" onclick="cargarEjemploPoisson()">💡 Cargar Ejemplo</button>
+                <button class="btn-calcular" onclick="calcularPoisson()">🧮 Calcular</button>
+                <button class="btn-limpiar" onclick="limpiarPoisson()">🧹 Limpiar</button>
+            </div>
+
+            <div id="error-pois" class="mensaje-error"></div>
+            <div id="exito-pois" class="mensaje-exito"></div>
+
+            <div id="resultados-poisson" class="seccion-resultados">
+                <h3>📋 Resultados</h3>
+                <table id="tabla-poisson" class="tabla-resultados"></table>
+            </div>
+            <div id="proc-poisson-seccion" class="seccion-resultados">
+                <h3>📝 Procedimiento</h3>
+                <div id="proc-poisson" class="procedimiento"></div>
+            </div>
+            <div id="interp-poisson-seccion" class="seccion-resultados">
+                <h3>💬 Interpretación</h3>
+                <div id="interp-poisson" class="mensaje-exito" style="display: block;"></div>
+            </div>
         </div>
         <div id="modulo-uniforme" class="modulo" style="display: none;">
             <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
@@ -341,5 +533,6 @@
     <script src="js/app.js"></script>
     <script src="js/descriptiva.js"></script>
     <script src="js/conteo.js"></script>
+    <script src="js/discretas.js"></script>
 </body>
 </html>
