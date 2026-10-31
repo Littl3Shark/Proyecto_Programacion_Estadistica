@@ -1,0 +1,201 @@
+/* ESTILOS GENERALES */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    display: flex; /* Esto pone el menú a la izquierda y el contenido a la derecha */
+    height: 100vh;
+    background-color: #f4f4f9;
+}
+
+/* MENÚ LATERAL */
+#menu {
+    width: 250px;
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px;
+    overflow-y: auto; /* Permite hacer scroll si la pantalla es pequeña */
+}
+#menu h3 {
+    text-align: center;
+    margin-top: 0;
+    border-bottom: 2px solid #1abc9c;
+    padding-bottom: 10px;
+}
+#menu button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: #34495e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: left;
+}
+#menu button:hover {
+    background-color: #1abc9c; /* Cambia de color al pasar el mouse */
+}
+
+/* ÁREA PRINCIPAL DE CONTENIDO */
+#contenido {
+    flex-grow: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+/* BOTONES DE ACCIÓN (Calcular, Limpiar, Ejemplo) */
+.botones-accion {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.botones-accion button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    color: white;
+    font-weight: bold;
+}
+.btn-calcular { background-color: #27ae60; } /* Verde */
+.btn-limpiar { background-color: #e74c3c; } /* Rojo */
+.btn-ejemplo { background-color: #f39c12; } /* Naranja */
+
+/* CAJA DE RESULTADOS */
+#resultado {
+    margin-top: 10px;
+    padding: 15px;
+    background-color: #fff;
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    min-height: 50px;
+    color: #555;
+}
+/* ============================================
+   ESTILOS PARA FORMULARIOS Y RESULTADOS
+   ============================================ */
+
+.descripcion-modulo {
+    background-color: #eaf4fc;
+    border-left: 4px solid #3498db;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 0 5px 5px 0;
+    color: #2c3e50;
+    font-size: 14px;
+}
+
+/* Área donde el usuario escribe los datos */
+textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    font-family: Consolas, monospace;
+    font-size: 15px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+textarea:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+/* Zona de importación de archivos */
+.zona-archivo {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #fef9e7;
+    border: 1px dashed #f39c12;
+    border-radius: 5px;
+    font-size: 13px;
+    color: #7d6608;
+}
+
+/* Mensajes de error */
+.mensaje-error {
+    background-color: #fdedec;
+    border-left: 4px solid #e74c3c;
+    padding: 12px 15px;
+    margin: 15px 0;
+    border-radius: 0 5px 5px 0;
+    color: #922b21;
+    font-weight: bold;
+    display: none;
+}
+
+/* Mensajes de éxito / interpretación */
+.mensaje-exito {
+    background-color: #eafaf1;
+    border-left: 4px solid #27ae60;
+    padding: 12px 15px;
+    margin: 15px 0;
+    border-radius: 0 5px 5px 0;
+    color: #1e8449;
+    display: none;
+}
+
+/* Tabla de resultados */
+.tabla-resultados {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: white;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+.tabla-resultados th,
+.tabla-resultados td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+.tabla-resultados th {
+    background-color: #2c3e50;
+    color: white;
+}
+.tabla-resultados tr:hover {
+    background-color: #f5f5f5;
+}
+.tabla-resultados td:last-child {
+    font-family: Consolas, monospace;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+/* Secciones de procedimiento e interpretación */
+.seccion-resultados {
+    margin-top: 25px;
+    display: none;
+}
+.seccion-resultados h3 {
+    color: #2c3e50;
+    border-bottom: 2px solid #1abc9c;
+    padding-bottom: 5px;
+}
+.procedimiento {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+    font-family: Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.8;
+    white-space: pre-wrap;
+    color: #333;
+}
+
+/* Nota sobre varianza poblacional vs muestral */
+.nota-varianza {
+    background-color: #fef9e7;
+    border-left: 4px solid #f39c12;
+    padding: 10px 15px;
+    margin-top: 15px;
+    border-radius: 0 5px 5px 0;
+    font-size: 13px;
+    color: #7d6608;
+}

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Proyecto Estadística I</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+    <!-- ============================================
+         MENÚ LATERAL IZQUIERDO
+         ============================================ -->
+    <nav id="menu">
+        <h3>📊 Menú</h3>
+        <button onclick="cambiarModulo('descriptiva')">1. Descriptiva</button>
+        <button onclick="cambiarModulo('conteo')">2. Conteo y prob.</button>
+        <button onclick="cambiarModulo('binomial')">3. Binomial</button>
+        <button onclick="cambiarModulo('hipergeometrica')">4. Hipergeométrica</button>
+        <button onclick="cambiarModulo('poisson')">5. Poisson</button>
+        <button onclick="cambiarModulo('uniforme')">6. Uniforme cont.</button>
+        <button onclick="cambiarModulo('normal')">7. Normal</button>
+        <button onclick="cambiarModulo('gamma')">8. Gamma</button>
+        <button onclick="cambiarModulo('exponencial')">9. Exponencial</button>
+        <button onclick="cambiarModulo('jicuadrada')">10. Ji cuadrada</button>
+        <button onclick="cambiarModulo('lognormal')">11. Lognormal</button>
+        <button onclick="cambiarModulo('tlc')">12. TLC</button>
+    </nav>
+
+    <!-- ============================================
+         ÁREA PRINCIPAL DERECHA
+         ============================================ -->
+    <main id="contenido">
+        <h2 id="titulo-modulo">Bienvenido a la Aplicación Estadística</h2>
+        <p>Selecciona un módulo en el menú de la izquierda para comenzar.</p>
+
+        <!-- ============================================
+             MÓDULO 1: DESCRIPTIVA
+             ============================================ -->
+        <div id="modulo-descriptiva" class="modulo" style="display: none;">
+
+            <!-- Descripción del módulo -->
+            <div class="descripcion-modulo">
+                <strong>📖 Descripción:</strong> Calcula medidas de tendencia central, dispersión y posición
+                para datos numéricos sin agrupar. Compara la varianza poblacional (divide entre n)
+                con la varianza muestral (divide entre n-1).
+            </div>
+
+            <!-- Entrada de datos -->
+            <h3>📥 Datos de entrada</h3>
+            <p style="color: #666; font-size: 13px;">
+                Escribe los números separados por comas, espacios o saltos de línea.
+                También puedes importar un archivo de texto (.txt o .csv).
+            </p>
+            <textarea id="datos-descriptiva"
+                      placeholder="Ejemplo: 120, 135, 128, 142, 135, 130, 125, 135, 140, 122"></textarea>
+
+            <!-- Importar archivo -->
+            <div class="zona-archivo">
+                📂 <strong>Importar archivo:</strong>
+                <input type="file" id="archivo-descriptiva" accept=".txt,.csv"
+                       onchange="importarArchivoDescriptiva(event)">
+                <br><small>El archivo debe contener números separados por comas, espacios o saltos de línea.</small>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="botones-accion">
+                <button class="btn-ejemplo" onclick="cargarEjemploDescriptiva()">💡 Cargar Ejemplo</button>
+                <button class="btn-calcular" onclick="calcularDescriptiva()">🧮 Calcular</button>
+                <button class="btn-limpiar" onclick="limpiarDescriptiva()">🧹 Limpiar</button>
+            </div>
+
+            <!-- Mensajes de error y éxito -->
+            <div id="error-descriptiva" class="mensaje-error"></div>
+            <div id="exito-descriptiva" class="mensaje-exito"></div>
+
+            <!-- Resultados -->
+            <div id="resultados-descriptiva" class="seccion-resultados">
+                <h3>📋 Resultados</h3>
+                <table id="tabla-descriptiva" class="tabla-resultados"></table>
+                <div class="nota-varianza">
+                    ⚠️ <strong>Comparación de varianzas:</strong> La varianza POBLACIONAL (σ²) divide entre
+                    <em>n</em> y se usa cuando los datos representan toda la población. La varianza MUESTRAL (s²)
+                    divide entre <em>n-1</em> y se usa cuando los datos son una muestra. La muestral es ligeramente
+                    mayor porque corrige el sesgo de estimación.
+                </div>
+            </div>
+
+            <!-- Procedimiento -->
+            <div id="procedimiento-seccion" class="seccion-resultados">
+                <h3>📝 Procedimiento paso a paso</h3>
+                <div id="procedimiento-descriptiva" class="procedimiento"></div>
+            </div>
+
+            <!-- Interpretación -->
+            <div id="interpretacion-seccion" class="seccion-resultados">
+                <h3>💬 Interpretación</h3>
+                <div id="interpretacion-descriptiva" class="mensaje-exito" style="display: block;"></div>
+            </div>
+
+        </div>
+        <!-- FIN MÓDULO DESCRIPTIVA -->
+
+        <!-- ============================================
+             MÓDULOS 2-12 (Se irán construyendo en las próximas fases)
+             ============================================ -->
+        <div id="modulo-conteo" class="modulo" style="display: none;">
+            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 3.</div>
+        </div>
+        <div id="modulo-binomial" class="modulo" style="display: none;">
+            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 4.</div>
+        </div>
+        <div id="modulo-hipergeometrica" class="modulo" style="display: none;">
+            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 4.</div>
+        </div>
+        <div id="modulo-poisson" class="modulo" style="display: none;">
+            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 4.</div>
+        </div>
+        <div id="modulo-uniforme" class="modulo" style="display: none;">
+            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
+        </div>
+        <div id="modulo-normal" class="modulo" style="display: none;">
+            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
+        </div>
+        <div id="modulo-gamma" class="modulo" style="display: none;">
+            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
+        </div>
+        <div id="modulo-exponencial" class="modulo" style="display: none;">
+            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
+        </div>
+        <div id="modulo-jicuadrada" class="modulo" style="display: none;">
+            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
+        </div>
+        <div id="modulo-lognormal" class="modulo" style="display: none;">
+            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
+        </div>
+        <div id="modulo-tlc" class="modulo" style="display: none;">
+            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 6.</div>
+        </div>
+
+    </main>
+
+    <!-- Cargar los scripts de JavaScript -->
+    <script src="js/app.js"></script>
+    <script src="js/descriptiva.js"></script>
+</body>
+</html>
