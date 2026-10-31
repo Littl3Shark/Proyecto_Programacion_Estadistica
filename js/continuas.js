@@ -736,3 +736,313 @@ function limpiarLognormal() {
     document.getElementById('tabla-lognormal').innerHTML = '';
     ocultarMensajesDist('logn');
 }
+// ============================================
+//  ██████  DISTRIBUCIÓN GAMMA  ██████
+// ============================================
+
+/**
+ * CDF Gamma con parámetros de forma α y escala θ
+ * P(X ≤ x) = gammaIncompletaReg(α, x/θ)
+ *
+ * Nota: gammaIncompletaReg(a, y) calcula P(a, y) = γ(a,y)/Γ(a)
+ * que es la CDF de la Gamma con forma a y escala 1.
+ * Para escala θ, se evalúa en x/θ.
+ */
+function cdfGamma(x, alfa, theta) {
+    if (x <= 0) return 0;
+    return gammaIncompletaReg(alfa, x / theta);
+}
+
+/**
+ * FUNCIÓN PRINCIPAL: CALCULAR GAMMA
+ */
+function calcularGamma() {
+    ocultarMensajesDist('gam');
+
+    const alfaInput = document.getElementById('gam-alfa').value;
+    const thetaInput = document.getElementById('gam-theta').value;
+    const xInput = document.getElementById('gam-x').value;
+    const cInput = document.getElementById('gam-c').value;
+    const dInput = document.getElementById('gam-d').value;
+
+    // Validar α (forma)
+    const alfa = parseFloat(alfaInput);
+    if (isNaN(alfa) || alfa <= 0) {
+        mostrarErrorDist('gam', '"α" (forma) debe ser un número mayor que 0.');
+        return;
+    }
+
+    // Validar θ (escala)
+    const theta = parseFloat(thetaInput);
+    if (isNaN(theta) || theta <= 0) {
+        mostrarErrorDist('gam', '"θ" (escala) debe ser un número mayor que 0.');
+        return;
+    }
+
+    // Validar x
+    const x = parseFloat(xInput);
+    if (isNaN(x) || x < 0) {
+        mostrarErrorDist('gam', '"x" debe ser un número ≥ 0 (la Gamma solo toma valores positivos).');
+        return;
+    }
+
+    // Validar c y d
+    const c = parseFloat(cInput);
+    const d = parseFloat(dInput);
+    if (isNaN(c) || isNaN(d) || c < 0 || d < 0) {
+        mostrarErrorDist('gam', '"c" y "d" deben ser números ≥ 0.');
+        return;
+    }
+    if (d <= c) {
+        mostrarErrorDist('gam', `"d" (${d}) debe ser mayor que "c" (${c}).`);
+        return;
+    }
+
+    // Calcular media y varianza
+    const media = alfa * theta;
+    const varianza = alfa * theta * theta;
+    const desviacion = Math.sqrt(varianza);
+
+    // Calcular probabilidades usando la gamma incompleta regularizada
+    const pIzquierda = cdfGamma(x, alfa, theta);
+    const pDerecha = 1 - cdfGamma(x, alfa, theta);
+    const pIntervalo = cdfGamma(d, alfa, theta) - cdfGamma(c, alfa, theta);
+
+    // Valores intermedios para el procedimiento
+    const yX = x / theta;
+    const yC = c / theta;
+    const yD = d / theta;
+
+    // Mostrar resultados
+    const tabla = document.getElementById('tabla-gamma');
+    tabla.innerHTML = `
+        <tr><th>Medida</th><th>Valor</th></tr>
+        <tr><td>α (forma)</td><td>${alfa}</td></tr>
+        <tr><td>θ (escala)</td><td>${theta}</td></tr>
+        <tr><td>Media μ = α·θ</td><td>${redondear(media, 4)}</td></tr>
+        <tr><td>Varianza σ² = α·θ²</td><td>${redondear(varianza, 4)}</td></tr>
+        <tr><td>Desviación estándar σ</td><td>${redondear(desviacion, 4)}</td></tr>
+        <tr style="background-color:#f0f4f8;"><td>x/θ (valor transformado de x=${x})</td><td>${redondear(yX, 4)}</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(X ≤ ${x})</strong> izquierda</td><td><strong>${redondear(pIzquierda, 6)}</strong> (${redondear(pIzquierda*100, 2)}%)</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(X ≥ ${x})</strong> derecha</td><td><strong>${redondear(pDerecha, 6)}</strong> (${redondear(pDerecha*100, 2)}%)</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(${c} ≤ X ≤ ${d})</strong> intervalo</td><td><strong>${redondear(pIntervalo, 6)}</strong> (${redondear(pIntervalo*100, 2)}%)</td></tr>
+    `;
+    document.getElementById('resultados-gamma').style.display = 'block';
+
+    // Procedimiento
+    document.getElementById('proc-gamma').textContent =
+`FUNCIÓN DE DENSIDAD GAMMA:
+f(x) = [x^(α-1) × e^(-x/θ)] / [Γ(α) × θ^α]  para x ≥ 0
+
+PARÁMETROS: α = ${alfa} (forma), θ = ${theta} (escala)
+
+MEDIA Y VARIANZA:
+μ = α × θ = ${alfa} × ${theta} = ${redondear(media, 4)}
+σ² = α × θ² = ${alfa} × ${theta}² = ${alfa} × ${redondear(theta*theta, 4)} = ${redondear(varianza, 4)}
+
+CÁLCULO DE PROBABILIDADES:
+La CDF de la Gamma(α, θ) se calcula con la función gamma incompleta regularizada:
+P(X ≤ x) = P(α, x/θ) donde P(a,y) = γ(a,y)/Γ(a)
+
+TRANSFORMACIÓN:
+y(x) = x/θ = ${x}/${theta} = ${redondear(yX, 4)}
+y(c) = c/θ = ${c}/${theta} = ${redondear(yC, 4)}
+y(d) = d/θ = ${d}/${theta} = ${redondear(yD, 4)}
+
+PROBABILIDAD IZQUIERDA P(X ≤ ${x}):
+P(X ≤ ${x}) = P(${alfa}, ${redondear(yX, 4)}) = ${redondear(pIzquierda, 6)}
+
+PROBABILIDAD DERECHA P(X ≥ ${x}):
+P(X ≥ ${x}) = 1 - P(${alfa}, ${redondear(yX, 4)}) = ${redondear(pDerecha, 6)}
+
+PROBABILIDAD INTERVALO P(${c} ≤ X ≤ ${d}):
+P(${c} ≤ X ≤ ${d}) = P(${alfa}, ${redondear(yD, 4)}) - P(${alfa}, ${redondear(yC, 4)})
+= ${redondear(cdfGamma(d, alfa, theta), 6)} - ${redondear(cdfGamma(c, alfa, theta), 6)}
+= ${redondear(pIntervalo, 6)}
+
+NOTA: El cálculo de P(a,y) usa serie de Taylor cuando y < a+1,
+y fracción continua (método de Lentz) cuando y ≥ a+1.`;
+    document.getElementById('proc-gamma-seccion').style.display = 'block';
+
+    // Interpretación
+    document.getElementById('interp-gamma').textContent =
+`📊 INTERPRETACIÓN:\n\n` +
+`La variable aleatoria X sigue una distribución Gamma con forma α = ${alfa} y escala θ = ${theta}.\n` +
+`La esperanza E(X) = α·θ = ${redondear(media, 4)} representa el valor promedio.\n\n` +
+`📌 PARÁMETROS:\n` +
+`• α (forma) = ${alfa}: controla la forma de la curva. α=1 es exponencial, α>1 es unimodal.\n` +
+`• θ (escala) = ${theta}: estira o comprime la distribución. Mayor θ → mayor dispersión.\n\n` +
+`RESULTADOS:\n` +
+`• P(X ≤ ${x}) = ${redondear(pIzquierda*100, 2)}%: probabilidad de que X sea a lo sumo ${x}.\n` +
+`• P(X ≥ ${x}) = ${redondear(pDerecha*100, 2)}%: probabilidad de que X sea al menos ${x}.\n` +
+`• P(${c} ≤ X ≤ ${d}) = ${redondear(pIntervalo*100, 2)}%: probabilidad de que X esté entre ${c} y ${d}.\n\n` +
+`⚠️ NOTA: La Gamma generaliza a la Exponencial (cuando α=1) y a la Ji-cuadrada (cuando α=ν/2, θ=2).`;
+    document.getElementById('interp-gamma-seccion').style.display = 'block';
+}
+
+function cargarEjemploGamma() {
+    document.getElementById('gam-alfa').value = '3';
+    document.getElementById('gam-theta').value = '2';
+    document.getElementById('gam-x').value = '5';
+    document.getElementById('gam-c').value = '3';
+    document.getElementById('gam-d').value = '8';
+    mostrarExitoDist('gam', '✅ Ejemplo cargado: Tiempo total de procesamiento de un lote de tareas (α=3, θ=2 minutos). Media esperada: 6 minutos.');
+}
+
+function limpiarGamma() {
+    ['gam-alfa','gam-theta','gam-x','gam-c','gam-d'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('resultados-gamma').style.display = 'none';
+    document.getElementById('proc-gamma-seccion').style.display = 'none';
+    document.getElementById('interp-gamma-seccion').style.display = 'none';
+    document.getElementById('tabla-gamma').innerHTML = '';
+    ocultarMensajesDist('gam');
+}
+
+
+// ============================================
+//  ██████  DISTRIBUCIÓN JI-CUADRADA  ██████
+// ============================================
+
+/**
+ * CDF Ji-cuadrada con ν grados de libertad
+ * Ji²(ν) es un caso especial de Gamma: Gamma(α=ν/2, θ=2)
+ * P(X ≤ x) = gammaIncompletaReg(ν/2, x/2)
+ */
+function cdfJiCuadrada(x, nu) {
+    if (x <= 0) return 0;
+    return gammaIncompletaReg(nu / 2, x / 2);
+}
+
+/**
+ * FUNCIÓN PRINCIPAL: CALCULAR JI-CUADRADA
+ */
+function calcularJiCuadrada() {
+    ocultarMensajesDist('ji');
+
+    const nuInput = document.getElementById('ji-nu').value;
+    const xInput = document.getElementById('ji-x').value;
+    const cInput = document.getElementById('ji-c').value;
+    const dInput = document.getElementById('ji-d').value;
+
+    // Validar ν
+    const nu = parseFloat(nuInput);
+    if (isNaN(nu) || nu <= 0) {
+        mostrarErrorDist('ji', '"ν" (grados de libertad) debe ser un número mayor que 0.');
+        return;
+    }
+
+    // Validar x
+    const x = parseFloat(xInput);
+    if (isNaN(x) || x < 0) {
+        mostrarErrorDist('ji', '"x" debe ser un número ≥ 0 (la Ji-cuadrada solo toma valores positivos).');
+        return;
+    }
+
+    // Validar c y d
+    const c = parseFloat(cInput);
+    const d = parseFloat(dInput);
+    if (isNaN(c) || isNaN(d) || c < 0 || d < 0) {
+        mostrarErrorDist('ji', '"c" y "d" deben ser números ≥ 0.');
+        return;
+    }
+    if (d <= c) {
+        mostrarErrorDist('ji', `"d" (${d}) debe ser mayor que "c" (${c}).`);
+        return;
+    }
+
+    // Calcular media y varianza
+    const media = nu;
+    const varianza = 2 * nu;
+    const desviacion = Math.sqrt(varianza);
+
+    // Calcular probabilidades
+    const pIzquierda = cdfJiCuadrada(x, nu);
+    const pDerecha = 1 - cdfJiCuadrada(x, nu);
+    const pIntervalo = cdfJiCuadrada(d, nu) - cdfJiCuadrada(c, nu);
+
+    // Parámetros equivalentes de Gamma para el procedimiento
+    const alfaGamma = nu / 2;
+    const thetaGamma = 2;
+
+    // Mostrar resultados
+    const tabla = document.getElementById('tabla-jicuadrada');
+    tabla.innerHTML = `
+        <tr><th>Medida</th><th>Valor</th></tr>
+        <tr><td>ν (grados de libertad)</td><td>${nu}</td></tr>
+        <tr style="background-color:#f0f4f8;"><td>Equivalente Gamma: α = ν/2</td><td>${redondear(alfaGamma, 4)}</td></tr>
+        <tr style="background-color:#f0f4f8;"><td>Equivalente Gamma: θ</td><td>2</td></tr>
+        <tr><td>Media μ = ν</td><td>${redondear(media, 4)}</td></tr>
+        <tr><td>Varianza σ² = 2ν</td><td>${redondear(varianza, 4)}</td></tr>
+        <tr><td>Desviación estándar σ</td><td>${redondear(desviacion, 4)}</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(X ≤ ${x})</strong> izquierda</td><td><strong>${redondear(pIzquierda, 6)}</strong> (${redondear(pIzquierda*100, 2)}%)</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(X ≥ ${x})</strong> derecha</td><td><strong>${redondear(pDerecha, 6)}</strong> (${redondear(pDerecha*100, 2)}%)</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(${c} ≤ X ≤ ${d})</strong> intervalo</td><td><strong>${redondear(pIntervalo, 6)}</strong> (${redondear(pIntervalo*100, 2)}%)</td></tr>
+    `;
+    document.getElementById('resultados-jicuadrada').style.display = 'block';
+
+    // Procedimiento
+    document.getElementById('proc-jicuadrada').textContent =
+`RELACIÓN CON LA DISTRIBUCIÓN GAMMA:
+Ji²(ν) = Gamma(α = ν/2, θ = 2)
+Esto permite usar la función gamma incompleta regularizada.
+
+PARÁMETRO: ν = ${nu} (grados de libertad)
+Equivalente: α = ν/2 = ${redondear(alfaGamma, 4)}, θ = 2
+
+MEDIA Y VARIANZA:
+μ = ν = ${nu}
+σ² = 2ν = 2 × ${nu} = ${redondear(varianza, 4)}
+
+CÁLCULO DE PROBABILIDADES:
+P(X ≤ x) = P(ν/2, x/2) donde P(a,y) es la gamma incompleta regularizada
+
+PROBABILIDAD IZQUIERDA P(X ≤ ${x}):
+P(X ≤ ${x}) = P(${redondear(alfaGamma, 4)}, ${x}/2) = P(${redondear(alfaGamma, 4)}, ${redondear(x/2, 4)}) = ${redondear(pIzquierda, 6)}
+
+PROBABILIDAD DERECHA P(X ≥ ${x}):
+P(X ≥ ${x}) = 1 - P(${redondear(alfaGamma, 4)}, ${redondear(x/2, 4)}) = ${redondear(pDerecha, 6)}
+
+PROBABILIDAD INTERVALO P(${c} ≤ X ≤ ${d}):
+P(${c} ≤ X ≤ ${d}) = P(${redondear(alfaGamma, 4)}, ${redondear(d/2, 4)}) - P(${redondear(alfaGamma, 4)}, ${redondear(c/2, 4)})
+= ${redondear(cdfJiCuadrada(d, nu), 6)} - ${redondear(cdfJiCuadrada(c, nu), 6)}
+= ${redondear(pIntervalo, 6)}
+
+NOTA: La Ji-cuadrada se usa frecuentemente en:
+• Pruebas de bondad de ajuste (Chi-square test)
+• Pruebas de independencia en tablas de contingencia
+• Estimación de varianzas poblacionales`;
+    document.getElementById('proc-jicuadrada-seccion').style.display = 'block';
+
+    // Interpretación
+    document.getElementById('interp-jicuadrada').textContent =
+`📊 INTERPRETACIÓN:\n\n` +
+`La variable aleatoria X sigue una distribución Ji-cuadrada con ν = ${nu} grados de libertad.\n` +
+`La esperanza E(X) = ν = ${nu} y la varianza σ² = 2ν = ${redondear(varianza, 4)}.\n\n` +
+`📌 RELACIÓN CON GAMMA:\n` +
+`Ji²(${nu}) equivale a Gamma(α=${redondear(alfaGamma, 4)}, θ=2).\n` +
+`Esto significa que la Ji-cuadrada es un caso especial de la Gamma.\n\n` +
+`RESULTADOS:\n` +
+`• P(X ≤ ${x}) = ${redondear(pIzquierda*100, 2)}%: probabilidad de que X sea a lo sumo ${x}.\n` +
+`• P(X ≥ ${x}) = ${redondear(pDerecha*100, 2)}%: probabilidad de que X sea al menos ${x}.\n` +
+`• P(${c} ≤ X ≤ ${d}) = ${redondear(pIntervalo*100, 2)}%: probabilidad de que X esté entre ${c} y ${d}.\n\n` +
+`📌 USO EN INGENIERÍA EN SISTEMAS:\n` +
+`La Ji-cuadrada se usa en pruebas de bondad de ajuste para verificar si los datos observados (ej: tiempos de respuesta, frecuencias de errores) siguen una distribución teórica esperada.`;
+    document.getElementById('interp-jicuadrada-seccion').style.display = 'block';
+}
+
+function cargarEjemploJiCuadrada() {
+    document.getElementById('ji-nu').value = '4';
+    document.getElementById('ji-x').value = '5';
+    document.getElementById('ji-c').value = '2';
+    document.getElementById('ji-d').value = '7';
+    mostrarExitoDist('ji', '✅ Ejemplo cargado: Prueba de bondad de ajuste con ν=4 grados de libertad. Equivale a Gamma(α=2, θ=2).');
+}
+
+function limpiarJiCuadrada() {
+    ['ji-nu','ji-x','ji-c','ji-d'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('resultados-jicuadrada').style.display = 'none';
+    document.getElementById('proc-jicuadrada-seccion').style.display = 'none';
+    document.getElementById('interp-jicuadrada-seccion').style.display = 'none';
+    document.getElementById('tabla-jicuadrada').innerHTML = '';
+    ocultarMensajesDist('ji');
+}

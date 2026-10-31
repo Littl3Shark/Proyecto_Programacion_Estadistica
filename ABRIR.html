@@ -663,9 +663,88 @@
                 <div id="interp-normal" class="mensaje-exito" style="display: block;"></div>
             </div>
         </div>
-        <div id="modulo-gamma" class="modulo" style="display: none;">
-            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
+        <!-- ============================================
+                    MÓDULO 8: DISTRIBUCIÓN GAMMA
+            ============================================ -->
+    <div id="modulo-gamma" class="modulo" style="display: none;">
+
+        <div class="info-dist">
+            <h4>📖 Definición</h4>
+            <p>Modela tiempos de espera hasta que ocurren <strong>α eventos consecutivos</strong>, donde cada evento ocurre a una tasa constante. Generaliza a la Exponencial (α=1) y a la Ji-cuadrada (α=ν/2, θ=2).</p>
+            <p><strong>Variable aleatoria X:</strong> tiempo o acumulación hasta el α-ésimo evento.</p>
+            <p><strong>Esperanza E(X):</strong> α·θ (el tiempo promedio total).</p>
+
+            <h4>✅ Supuestos</h4>
+            <ul>
+                <li>Los eventos ocurren de forma independiente</li>
+                <li>La tasa de ocurrencia es constante</li>
+                <li>X solo toma valores ≥ 0</li>
+                <li>α (forma) y θ (escala) son positivos</li>
+            </ul>
+
+            <h4>📐 Fórmulas</h4>
+            <div class="formula-box">
+                <strong>f(x)</strong> = [x^(α-1) × e^(-x/θ)] / [Γ(α) × θ^α]<br>
+                <strong>Media:</strong> μ = α·θ &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Varianza:</strong> σ² = α·θ²<br>
+                <strong>CDF:</strong> P(X ≤ x) = P(α, x/θ) [gamma incompleta regularizada]<br>
+                <strong>Casos especiales:</strong> α=1 → Exponencial, θ=2 y α=ν/2 → Ji²
+            </div>
         </div>
+
+        <h3>📥 Parámetros de la distribución</h3>
+        <div class="campo-grupo">
+            <label for="gam-alfa">α (forma):</label>
+            <input type="number" id="gam-alfa" min="0.0001" step="any" placeholder="Ej: 3">
+            <small>Debe ser > 0. α=1 equivale a Exponencial.</small>
+        </div>
+        <div class="campo-grupo">
+            <label for="gam-theta">θ (escala):</label>
+            <input type="number" id="gam-theta" min="0.0001" step="any" placeholder="Ej: 2">
+            <small>Debe ser > 0. θ=2 con α=ν/2 equivale a Ji-cuadrada.</small>
+        </div>
+
+        <hr class="separador">
+        <h3>📍 Punto de evaluación (para P(X≤x) y P(X≥x))</h3>
+        <div class="campo-grupo">
+            <label for="gam-x">x (punto):</label>
+            <input type="number" id="gam-x" min="0" step="any" placeholder="Ej: 5">
+            <small>Debe ser ≥ 0</small>
+        </div>
+
+        <hr class="separador">
+        <h3>📏 Intervalo (para P(c≤X≤d))</h3>
+        <div class="campo-grupo">
+            <label for="gam-c">c (límite inferior):</label>
+            <input type="number" id="gam-c" min="0" step="any" placeholder="Ej: 3">
+        </div>
+        <div class="campo-grupo">
+            <label for="gam-d">d (límite superior):</label>
+            <input type="number" id="gam-d" min="0" step="any" placeholder="Ej: 8">
+            <small>Debe ser mayor que c</small>
+        </div>
+
+        <div class="botones-accion">
+            <button class="btn-ejemplo" onclick="cargarEjemploGamma()">💡 Cargar Ejemplo</button>
+            <button class="btn-calcular" onclick="calcularGamma()">🧮 Calcular</button>
+            <button class="btn-limpiar" onclick="limpiarGamma()">🧹 Limpiar</button>
+        </div>
+
+        <div id="error-gam" class="mensaje-error"></div>
+        <div id="exito-gam" class="mensaje-exito"></div>
+
+        <div id="resultados-gamma" class="seccion-resultados">
+            <h3>📋 Resultados</h3>
+            <table id="tabla-gamma" class="tabla-resultados"></table>
+        </div>
+        <div id="proc-gamma-seccion" class="seccion-resultados">
+            <h3>📝 Procedimiento</h3>
+            <div id="proc-gamma" class="procedimiento"></div>
+        </div>
+        <div id="interp-gamma-seccion" class="seccion-resultados">
+            <h3>💬 Interpretación</h3>
+            <div id="interp-gamma" class="mensaje-exito" style="display: block;"></div>
+        </div>
+    </div>
         <!-- ============================================
                  MÓDULO 9: DISTRIBUCIÓN EXPONENCIAL
            ============================================ -->
@@ -743,8 +822,81 @@
                 <div id="interp-exponencial" class="mensaje-exito" style="display: block;"></div>
             </div>
         </div>
+        <!-- ============================================
+            MÓDULO 10: DISTRIBUCIÓN JI-CUADRADA
+            ============================================ -->
         <div id="modulo-jicuadrada" class="modulo" style="display: none;">
-            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
+
+            <div class="info-dist">
+                <h4>📖 Definición</h4>
+                <p>Distribución que resulta de la suma de <strong>ν variables normales estándar al cuadrado</strong>. Es un caso especial de la Gamma: <strong>Ji²(ν) = Gamma(α=ν/2, θ=2)</strong>. Se usa en pruebas de hipótesis y bondad de ajuste.</p>
+                <p><strong>Variable aleatoria X:</strong> suma de ν normales estándar al cuadrado.</p>
+                <p><strong>Esperanza E(X):</strong> ν (los grados de libertad).</p>
+
+                <h4>✅ Supuestos</h4>
+                <ul>
+                    <li>ν (grados de libertad) es un número positivo</li>
+                    <li>X solo toma valores ≥ 0</li>
+                    <li>La forma depende de ν: a mayor ν, más simétrica</li>
+                    <li>Se usa para pruebas estadísticas y estimación de varianzas</li>
+                </ul>
+
+                <h4>📐 Fórmulas</h4>
+                <div class="formula-box">
+                    <strong>Relación con Gamma:</strong> Ji²(ν) = Gamma(ν/2, 2)<br>
+                    <strong>Media:</strong> μ = ν &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Varianza:</strong> σ² = 2ν<br>
+                    <strong>CDF:</strong> P(X ≤ x) = P(ν/2, x/2) [gamma incompleta regularizada]
+                </div>
+            </div>
+
+            <h3>📥 Parámetros de la distribución</h3>
+            <div class="campo-grupo">
+                <label for="ji-nu">ν (grados de libertad):</label>
+                <input type="number" id="ji-nu" min="0.0001" step="any" placeholder="Ej: 4">
+                <small>Debe ser > 0. Típicamente es un entero, pero se aceptan decimales.</small>
+            </div>
+
+            <hr class="separador">
+            <h3>📍 Punto de evaluación (para P(X≤x) y P(X≥x))</h3>
+            <div class="campo-grupo">
+                <label for="ji-x">x (punto):</label>
+                <input type="number" id="ji-x" min="0" step="any" placeholder="Ej: 5">
+                <small>Debe ser ≥ 0</small>
+            </div>
+
+            <hr class="separador">
+            <h3>📏 Intervalo (para P(c≤X≤d))</h3>
+            <div class="campo-grupo">
+                <label for="ji-c">c (límite inferior):</label>
+                <input type="number" id="ji-c" min="0" step="any" placeholder="Ej: 2">
+            </div>
+            <div class="campo-grupo">
+                <label for="ji-d">d (límite superior):</label>
+                <input type="number" id="ji-d" min="0" step="any" placeholder="Ej: 7">
+                <small>Debe ser mayor que c</small>
+            </div>
+
+            <div class="botones-accion">
+                <button class="btn-ejemplo" onclick="cargarEjemploJiCuadrada()">💡 Cargar Ejemplo</button>
+                <button class="btn-calcular" onclick="calcularJiCuadrada()">🧮 Calcular</button>
+                <button class="btn-limpiar" onclick="limpiarJiCuadrada()">🧹 Limpiar</button>
+            </div>
+
+            <div id="error-ji" class="mensaje-error"></div>
+            <div id="exito-ji" class="mensaje-exito"></div>
+
+            <div id="resultados-jicuadrada" class="seccion-resultados">
+                <h3>📋 Resultados</h3>
+                <table id="tabla-jicuadrada" class="tabla-resultados"></table>
+            </div>
+            <div id="proc-jicuadrada-seccion" class="seccion-resultados">
+                <h3>📝 Procedimiento</h3>
+                <div id="proc-jicuadrada" class="procedimiento"></div>
+            </div>
+            <div id="interp-jicuadrada-seccion" class="seccion-resultados">
+                <h3>💬 Interpretación</h3>
+                <div id="interp-jicuadrada" class="mensaje-exito" style="display: block;"></div>
+            </div>
         </div>
         <!-- ============================================
                 MÓDULO 11: DISTRIBUCIÓN LOGNORMAL
