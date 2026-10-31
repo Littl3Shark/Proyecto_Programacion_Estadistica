@@ -417,3 +417,322 @@ function limpiarExponencial() {
     document.getElementById('tabla-exponencial').innerHTML = '';
     ocultarMensajesDist('expo');
 }
+// ============================================
+//  ██████  DISTRIBUCIÓN NORMAL  ██████
+// ============================================
+
+/**
+ * CDF Normal con media μ y desviación estándar σ
+ * Se estandariza: z = (x - μ) / σ, luego se usa Φ(z)
+ */
+function cdfNormal(x, mu, sigma) {
+    const z = (x - mu) / sigma;
+    return cdfNormalEstandar(z);
+}
+
+/**
+ * FUNCIÓN PRINCIPAL: CALCULAR NORMAL
+ */
+function calcularNormal() {
+    ocultarMensajesDist('norm');
+
+    const muInput = document.getElementById('norm-mu').value;
+    const sigmaInput = document.getElementById('norm-sigma').value;
+    const xInput = document.getElementById('norm-x').value;
+    const cInput = document.getElementById('norm-c').value;
+    const dInput = document.getElementById('norm-d').value;
+
+    // Validar μ
+    const mu = parseFloat(muInput);
+    if (isNaN(mu)) {
+        mostrarErrorDist('norm', '"μ" (media) debe ser un número.');
+        return;
+    }
+
+    // Validar σ
+    const sigma = parseFloat(sigmaInput);
+    if (isNaN(sigma) || sigma <= 0) {
+        mostrarErrorDist('norm', '"σ" (desviación estándar) debe ser un número mayor que 0.');
+        return;
+    }
+
+    // Validar x
+    const x = parseFloat(xInput);
+    if (isNaN(x)) {
+        mostrarErrorDist('norm', '"x" (punto de evaluación) debe ser un número.');
+        return;
+    }
+
+    // Validar c y d
+    const c = parseFloat(cInput);
+    const d = parseFloat(dInput);
+    if (isNaN(c) || isNaN(d)) {
+        mostrarErrorDist('norm', '"c" y "d" (intervalo) deben ser números.');
+        return;
+    }
+    if (d <= c) {
+        mostrarErrorDist('norm', `"d" (${d}) debe ser mayor que "c" (${c}).`);
+        return;
+    }
+
+    // Estandarización: z = (x - μ) / σ
+    const zX = (x - mu) / sigma;
+    const zC = (c - mu) / sigma;
+    const zD = (d - mu) / sigma;
+
+    // Calcular probabilidades usando la CDF normal estándar
+    const pIzquierda = cdfNormalEstandar(zX);
+    const pDerecha = 1 - cdfNormalEstandar(zX);
+    const pIntervalo = cdfNormalEstandar(zD) - cdfNormalEstandar(zC);
+
+    // Media y varianza
+    const media = mu;
+    const varianza = sigma * sigma;
+
+    // Mostrar resultados
+    const tabla = document.getElementById('tabla-normal');
+    tabla.innerHTML = `
+        <tr><th>Medida</th><th>Valor</th></tr>
+        <tr><td>μ (media)</td><td>${mu}</td></tr>
+        <tr><td>σ (desviación estándar)</td><td>${sigma}</td></tr>
+        <tr><td>Varianza σ²</td><td>${redondear(varianza, 4)}</td></tr>
+        <tr style="background-color:#fef9e7;"><td><strong>z para x=${x}</strong></td><td><strong>${redondear(zX, 4)}</strong></td></tr>
+        <tr style="background-color:#fef9e7;"><td><strong>z para c=${c}</strong></td><td><strong>${redondear(zC, 4)}</strong></td></tr>
+        <tr style="background-color:#fef9e7;"><td><strong>z para d=${d}</strong></td><td><strong>${redondear(zD, 4)}</strong></td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(X ≤ ${x})</strong> izquierda</td><td><strong>${redondear(pIzquierda, 6)}</strong> (${redondear(pIzquierda*100, 2)}%)</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(X ≥ ${x})</strong> derecha</td><td><strong>${redondear(pDerecha, 6)}</strong> (${redondear(pDerecha*100, 2)}%)</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(${c} ≤ X ≤ ${d})</strong> intervalo</td><td><strong>${redondear(pIntervalo, 6)}</strong> (${redondear(pIntervalo*100, 2)}%)</td></tr>
+    `;
+    document.getElementById('resultados-normal').style.display = 'block';
+
+    // Procedimiento
+    document.getElementById('proc-normal').textContent =
+`ESTANDARIZACIÓN: z = (x - μ) / σ
+Convierte cualquier Normal(μ, σ) a la Normal Estándar N(0,1) para usar la tabla Φ.
+
+PARÁMETROS: μ = ${mu}, σ = ${sigma}
+
+ESTANDARIZACIÓN DE CADA PUNTO:
+z(x=${x}) = (${x} - ${mu}) / ${sigma} = ${redondear(zX, 4)}
+z(c=${c}) = (${c} - ${mu}) / ${sigma} = ${redondear(zC, 4)}
+z(d=${d}) = (${d} - ${mu}) / ${sigma} = ${redondear(zD, 4)}
+
+PROBABILIDAD IZQUIERDA P(X ≤ ${x}):
+P(X ≤ ${x}) = Φ(${redondear(zX, 4)}) = ${redondear(pIzquierda, 6)}
+
+PROBABILIDAD DERECHA P(X ≥ ${x}):
+P(X ≥ ${x}) = 1 - Φ(${redondear(zX, 4)}) = 1 - ${redondear(pIzquierda, 6)} = ${redondear(pDerecha, 6)}
+
+PROBABILIDAD INTERVALO P(${c} ≤ X ≤ ${d}):
+P(${c} ≤ X ≤ ${d}) = Φ(${redondear(zD, 4)}) - Φ(${redondear(zC, 4)})
+= ${redondear(cdfNormalEstandar(zD), 6)} - ${redondear(cdfNormalEstandar(zC), 6)} = ${redondear(pIntervalo, 6)}
+
+MEDIA Y VARIANZA:
+Media = μ = ${mu}
+Varianza = σ² = ${sigma}² = ${redondear(varianza, 4)}`;
+    document.getElementById('proc-normal-seccion').style.display = 'block';
+
+    // Interpretación (incluye significado de σ como pide el proyecto)
+    document.getElementById('interp-normal').textContent =
+`📊 INTERPRETACIÓN:\n\n` +
+`La variable aleatoria X sigue una distribución Normal con media μ = ${mu} y desviación estándar σ = ${sigma}.\n` +
+`La esperanza E(X) = μ = ${mu} es el valor central de la distribución.\n\n` +
+`📌 SIGNIFICADO DE σ (desviación estándar):\n` +
+`σ = ${sigma} mide qué tan dispersos están los datos alrededor de la media.\n` +
+`• μ ± 1σ = [${redondear(mu - sigma, 2)}, ${redondear(mu + sigma, 2)}] → contiene ≈68.27% de los datos\n` +
+`• μ ± 2σ = [${redondear(mu - 2*sigma, 2)}, ${redondear(mu + 2*sigma, 2)}] → contiene ≈95.45% de los datos\n` +
+`• μ ± 3σ = [${redondear(mu - 3*sigma, 2)}, ${redondear(mu + 3*sigma, 2)}] → contiene ≈99.73% de los datos\n` +
+`Un σ pequeño indica datos concentrados cerca de μ; un σ grande indica mayor variabilidad.\n\n` +
+`RESULTADOS:\n` +
+`• P(X ≤ ${x}) = ${redondear(pIzquierda*100, 2)}% (z = ${redondear(zX, 4)})\n` +
+`• P(X ≥ ${x}) = ${redondear(pDerecha*100, 2)}% (z = ${redondear(zX, 4)})\n` +
+`• P(${c} ≤ X ≤ ${d}) = ${redondear(pIntervalo*100, 2)}% (z de ${redondear(zC, 4)} a ${redondear(zD, 4)})`;
+    document.getElementById('interp-normal-seccion').style.display = 'block';
+}
+
+function cargarEjemploNormal() {
+    document.getElementById('norm-mu').value = '200';
+    document.getElementById('norm-sigma').value = '30';
+    document.getElementById('norm-x').value = '250';
+    document.getElementById('norm-c').value = '150';
+    document.getElementById('norm-d').value = '250';
+    mostrarExitoDist('norm', '✅ Ejemplo cargado: El tiempo de respuesta de un servidor sigue N(μ=200ms, σ=30ms). ¿Probabilidad de diferentes rangos?');
+}
+
+function limpiarNormal() {
+    ['norm-mu','norm-sigma','norm-x','norm-c','norm-d'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('resultados-normal').style.display = 'none';
+    document.getElementById('proc-normal-seccion').style.display = 'none';
+    document.getElementById('interp-normal-seccion').style.display = 'none';
+    document.getElementById('tabla-normal').innerHTML = '';
+    ocultarMensajesDist('norm');
+}
+
+
+// ============================================
+//  ██████  DISTRIBUCIÓN LOGNORMAL  ██████
+// ============================================
+
+/**
+ * CDF Lognormal
+ * Si X ~ Lognormal(μ_y, σ_y), entonces ln(X) ~ Normal(μ_y, σ_y)
+ * P(X ≤ x) = Φ((ln(x) - μ_y) / σ_y)
+ */
+function cdfLognormal(x, muY, sigmaY) {
+    if (x <= 0) return 0;
+    const z = (Math.log(x) - muY) / sigmaY;
+    return cdfNormalEstandar(z);
+}
+
+/**
+ * FUNCIÓN PRINCIPAL: CALCULAR LOGNORMAL
+ */
+function calcularLognormal() {
+    ocultarMensajesDist('logn');
+
+    const muYInput = document.getElementById('logn-muy').value;
+    const sigmaYInput = document.getElementById('logn-sigmay').value;
+    const xInput = document.getElementById('logn-x').value;
+    const cInput = document.getElementById('logn-c').value;
+    const dInput = document.getElementById('logn-d').value;
+
+    // Validar μ_y
+    const muY = parseFloat(muYInput);
+    if (isNaN(muY)) {
+        mostrarErrorDist('logn', '"μ_y" (media del logaritmo) debe ser un número.');
+        return;
+    }
+
+    // Validar σ_y
+    const sigmaY = parseFloat(sigmaYInput);
+    if (isNaN(sigmaY) || sigmaY <= 0) {
+        mostrarErrorDist('logn', '"σ_y" (desviación del logaritmo) debe ser un número mayor que 0.');
+        return;
+    }
+
+    // Validar x (debe ser > 0 porque ln(x) requiere x > 0)
+    const x = parseFloat(xInput);
+    if (isNaN(x) || x <= 0) {
+        mostrarErrorDist('logn', '"x" debe ser un número mayor que 0 (la Lognormal solo toma valores positivos).');
+        return;
+    }
+
+    // Validar c y d (deben ser > 0)
+    const c = parseFloat(cInput);
+    const d = parseFloat(dInput);
+    if (isNaN(c) || isNaN(d) || c <= 0 || d <= 0) {
+        mostrarErrorDist('logn', '"c" y "d" deben ser números mayores que 0.');
+        return;
+    }
+    if (d <= c) {
+        mostrarErrorDist('logn', `"d" (${d}) debe ser mayor que "c" (${c}).`);
+        return;
+    }
+
+    // ESTANDARIZACIÓN DEL LOGARITMO NATURAL
+    // Si X ~ Lognormal(μ_y, σ_y), entonces Y = ln(X) ~ Normal(μ_y, σ_y)
+    // z = (ln(x) - μ_y) / σ_y
+    const lnX = Math.log(x);
+    const lnC = Math.log(c);
+    const lnD = Math.log(d);
+    const zX = (lnX - muY) / sigmaY;
+    const zC = (lnC - muY) / sigmaY;
+    const zD = (lnD - muY) / sigmaY;
+
+    // Calcular probabilidades
+    const pIzquierda = cdfNormalEstandar(zX);
+    const pDerecha = 1 - cdfNormalEstandar(zX);
+    const pIntervalo = cdfNormalEstandar(zD) - cdfNormalEstandar(zC);
+
+    // Media y varianza de X (la variable lognormal original, NO del logaritmo)
+    const mediaX = Math.exp(muY + (sigmaY * sigmaY) / 2);
+    const varianzaX = (Math.exp(sigmaY * sigmaY) - 1) * Math.exp(2 * muY + sigmaY * sigmaY);
+    const desviacionX = Math.sqrt(varianzaX);
+
+    // Mostrar resultados
+    const tabla = document.getElementById('tabla-lognormal');
+    tabla.innerHTML = `
+        <tr><th>Medida</th><th>Valor</th></tr>
+        <tr><td>μ_y (media de ln(X))</td><td>${muY}</td></tr>
+        <tr><td>σ_y (desviación de ln(X))</td><td>${sigmaY}</td></tr>
+        <tr style="background-color:#fef9e7;"><td><strong>Media de X = e^(μ_y + σ_y²/2)</strong></td><td><strong>${redondear(mediaX, 4)}</strong></td></tr>
+        <tr style="background-color:#fef9e7;"><td><strong>Varianza de X</strong></td><td><strong>${redondear(varianzaX, 4)}</strong></td></tr>
+        <tr><td>Desviación estándar de X</td><td>${redondear(desviacionX, 4)}</td></tr>
+        <tr style="background-color:#f0f4f8;"><td>ln(x=${x})</td><td>${redondear(lnX, 4)}</td></tr>
+        <tr style="background-color:#f0f4f8;"><td>z para x = (ln(x)-μ_y)/σ_y</td><td>${redondear(zX, 4)}</td></tr>
+        <tr style="background-color:#f0f4f8;"><td>ln(c=${c})</td><td>${redondear(lnC, 4)}</td></tr>
+        <tr style="background-color:#f0f4f8;"><td>z para c</td><td>${redondear(zC, 4)}</td></tr>
+        <tr style="background-color:#f0f4f8;"><td>ln(d=${d})</td><td>${redondear(lnD, 4)}</td></tr>
+        <tr style="background-color:#f0f4f8;"><td>z para d</td><td>${redondear(zD, 4)}</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(X ≤ ${x})</strong> izquierda</td><td><strong>${redondear(pIzquierda, 6)}</strong> (${redondear(pIzquierda*100, 2)}%)</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(X ≥ ${x})</strong> derecha</td><td><strong>${redondear(pDerecha, 6)}</strong> (${redondear(pDerecha*100, 2)}%)</td></tr>
+        <tr style="background-color:#eafaf1;"><td><strong>P(${c} ≤ X ≤ ${d})</strong> intervalo</td><td><strong>${redondear(pIntervalo, 6)}</strong> (${redondear(pIntervalo*100, 2)}%)</td></tr>
+    `;
+    document.getElementById('resultados-lognormal').style.display = 'block';
+
+    // Procedimiento
+    document.getElementById('proc-lognormal').textContent =
+`TRANSFORMACIÓN LOGARÍTMICA:
+Si X ~ Lognormal(μ_y, σ_y), entonces Y = ln(X) ~ Normal(μ_y, σ_y).
+Esto permite usar la Normal Estándar para calcular probabilidades.
+
+PARÁMETROS: μ_y = ${muY}, σ_y = ${sigmaY}
+
+PASO 1: APLICAR LOGARITMO NATURAL
+ln(x=${x}) = ${redondear(lnX, 4)}
+ln(c=${c}) = ${redondear(lnC, 4)}
+ln(d=${d}) = ${redondear(lnD, 4)}
+
+PASO 2: ESTANDARIZAR
+z = (ln(x) - μ_y) / σ_y
+z(x) = (${redondear(lnX, 4)} - ${muY}) / ${sigmaY} = ${redondear(zX, 4)}
+z(c) = (${redondear(lnC, 4)} - ${muY}) / ${sigmaY} = ${redondear(zC, 4)}
+z(d) = (${redondear(lnD, 4)} - ${muY}) / ${sigmaY} = ${redondear(zD, 4)}
+
+PASO 3: USAR CDF NORMAL ESTÁNDAR Φ
+P(X ≤ ${x}) = Φ(${redondear(zX, 4)}) = ${redondear(pIzquierda, 6)}
+P(X ≥ ${x}) = 1 - Φ(${redondear(zX, 4)}) = ${redondear(pDerecha, 6)}
+P(${c} ≤ X ≤ ${d}) = Φ(${redondear(zD, 4)}) - Φ(${redondear(zC, 4)}) = ${redondear(pIntervalo, 6)}
+
+MEDIA Y VARIANZA DE X (la variable original, no del logaritmo):
+Media de X = e^(μ_y + σ_y²/2) = e^(${muY} + ${redondear(sigmaY*sigmaY/2, 4)}) = e^(${redondear(muY + sigmaY*sigmaY/2, 4)}) = ${redondear(mediaX, 4)}
+Varianza de X = (e^(σ_y²) - 1) × e^(2μ_y + σ_y²)
+= (e^(${redondear(sigmaY*sigmaY, 4)}) - 1) × e^(${redondear(2*muY + sigmaY*sigmaY, 4)})
+= (${redondear(Math.exp(sigmaY*sigmaY) - 1, 6)}) × ${redondear(Math.exp(2*muY + sigmaY*sigmaY), 4)}
+= ${redondear(varianzaX, 4)}`;
+    document.getElementById('proc-lognormal-seccion').style.display = 'block';
+
+    // Interpretación
+    document.getElementById('interp-lognormal').textContent =
+`📊 INTERPRETACIÓN:\n\n` +
+`La variable aleatoria X sigue una distribución Lognormal. Esto significa que ln(X) sigue una distribución Normal con μ_y = ${muY} y σ_y = ${sigmaY}.\n\n` +
+`📌 ESTANDARIZACIÓN DEL LOGARITMO NATURAL:\n` +
+`Para calcular probabilidades, primero aplicamos ln() al valor de X, luego estandarizamos:\n` +
+`z = (ln(x) - μ_y) / σ_y\n` +
+`Esto convierte el problema Lognormal en uno Normal Estándar, que podemos resolver con Φ(z).\n\n` +
+`La esperanza E(X) = e^(μ_y + σ_y²/2) = ${redondear(mediaX, 4)} es la media de X (NO es μ_y).\n` +
+`⚠️ NOTA: La media de X es diferente de μ_y porque la transformación exponencial no es lineal.\n\n` +
+`RESULTADOS:\n` +
+`• P(X ≤ ${x}) = ${redondear(pIzquierda*100, 2)}% (z = ${redondear(zX, 4)})\n` +
+`• P(X ≥ ${x}) = ${redondear(pDerecha*100, 2)}% (z = ${redondear(zX, 4)})\n` +
+`• P(${c} ≤ X ≤ ${d}) = ${redondear(pIntervalo*100, 2)}% (z de ${redondear(zC, 4)} a ${redondear(zD, 4)})`;
+    document.getElementById('interp-lognormal-seccion').style.display = 'block';
+}
+
+function cargarEjemploLognormal() {
+    document.getElementById('logn-muy').value = '3';
+    document.getElementById('logn-sigmay').value = '0.5';
+    document.getElementById('logn-x').value = '30';
+    document.getElementById('logn-c').value = '15';
+    document.getElementById('logn-d').value = '30';
+    mostrarExitoDist('logn', '✅ Ejemplo cargado: El tiempo de respuesta de una API sigue Lognormal(μ_y=3, σ_y=0.5). Los valores de x, c, d están en ms.');
+}
+
+function limpiarLognormal() {
+    ['logn-muy','logn-sigmay','logn-x','logn-c','logn-d'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('resultados-lognormal').style.display = 'none';
+    document.getElementById('proc-lognormal-seccion').style.display = 'none';
+    document.getElementById('interp-lognormal-seccion').style.display = 'none';
+    document.getElementById('tabla-lognormal').innerHTML = '';
+    ocultarMensajesDist('logn');
+}

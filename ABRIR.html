@@ -583,8 +583,85 @@
                 <div id="interp-uniforme" class="mensaje-exito" style="display: block;"></div>
             </div>
         </div>
+       <!-- ============================================
+                MÓDULO 7: DISTRIBUCIÓN NORMAL
+        ============================================ -->
         <div id="modulo-normal" class="modulo" style="display: none;">
-            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
+
+            <div class="info-dist">
+                <h4>📖 Definición</h4>
+                <p>Modela variables continuas con distribución simétrica alrededor de una media μ. Es la distribución más importante en estadística por el Teorema del Límite Central. También llamada distribución gaussiana o campana de Gauss.</p>
+                <p><strong>Variable aleatoria X:</strong> valor continuo distribuido normalmente.</p>
+                <p><strong>Esperanza E(X):</strong> μ (el centro de la campana).</p>
+
+                <h4>✅ Supuestos</h4>
+                <ul>
+                    <li>La distribución es simétrica respecto a μ</li>
+                    <li>La media, mediana y moda coinciden en μ</li>
+                    <li>Los valores extremos son poco probables</li>
+                    <li>σ determina la "anchura" de la campana</li>
+                </ul>
+
+                <h4>📐 Fórmulas</h4>
+                <div class="formula-box">
+                    <strong>f(x)</strong> = (1/(σ√(2π))) × e^(-(x-μ)²/(2σ²))<br>
+                    <strong>Media:</strong> μ &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Varianza:</strong> σ²<br>
+                    <strong>Estandarización:</strong> z = (x - μ) / σ → usar Φ(z)<br>
+                    <strong>Regla empírica:</strong> μ±1σ ≈ 68%, μ±2σ ≈ 95%, μ±3σ ≈ 99.7%
+                </div>
+            </div>
+
+            <h3>📥 Parámetros de la distribución</h3>
+            <div class="campo-grupo">
+                <label for="norm-mu">μ (media):</label>
+                <input type="number" id="norm-mu" step="any" placeholder="Ej: 200">
+            </div>
+            <div class="campo-grupo">
+                <label for="norm-sigma">σ (desviación estándar):</label>
+                <input type="number" id="norm-sigma" min="0.0001" step="any" placeholder="Ej: 30">
+                <small>Debe ser > 0. Mide la dispersión de los datos.</small>
+            </div>
+
+            <hr class="separador">
+            <h3>📍 Punto de evaluación (para P(X≤x) y P(X≥x))</h3>
+            <div class="campo-grupo">
+                <label for="norm-x">x (punto):</label>
+                <input type="number" id="norm-x" step="any" placeholder="Ej: 250">
+            </div>
+
+            <hr class="separador">
+            <h3>📏 Intervalo (para P(c≤X≤d))</h3>
+            <div class="campo-grupo">
+                <label for="norm-c">c (límite inferior):</label>
+                <input type="number" id="norm-c" step="any" placeholder="Ej: 150">
+            </div>
+            <div class="campo-grupo">
+                <label for="norm-d">d (límite superior):</label>
+                <input type="number" id="norm-d" step="any" placeholder="Ej: 250">
+                <small>Debe ser mayor que c</small>
+            </div>
+
+            <div class="botones-accion">
+                <button class="btn-ejemplo" onclick="cargarEjemploNormal()">💡 Cargar Ejemplo</button>
+                <button class="btn-calcular" onclick="calcularNormal()">🧮 Calcular</button>
+                <button class="btn-limpiar" onclick="limpiarNormal()">🧹 Limpiar</button>
+            </div>
+
+            <div id="error-norm" class="mensaje-error"></div>
+            <div id="exito-norm" class="mensaje-exito"></div>
+
+            <div id="resultados-normal" class="seccion-resultados">
+                <h3>📋 Resultados</h3>
+                <table id="tabla-normal" class="tabla-resultados"></table>
+            </div>
+            <div id="proc-normal-seccion" class="seccion-resultados">
+                <h3>📝 Procedimiento (Estandarización)</h3>
+                <div id="proc-normal" class="procedimiento"></div>
+            </div>
+            <div id="interp-normal-seccion" class="seccion-resultados">
+                <h3>💬 Interpretación (incluye significado de σ)</h3>
+                <div id="interp-normal" class="mensaje-exito" style="display: block;"></div>
+            </div>
         </div>
         <div id="modulo-gamma" class="modulo" style="display: none;">
             <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
@@ -669,8 +746,88 @@
         <div id="modulo-jicuadrada" class="modulo" style="display: none;">
             <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
         </div>
+        <!-- ============================================
+                MÓDULO 11: DISTRIBUCIÓN LOGNORMAL
+        ============================================ -->
         <div id="modulo-lognormal" class="modulo" style="display: none;">
-            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
+
+            <div class="info-dist">
+                <h4>📖 Definición</h4>
+                <p>Modela variables positivas donde el <strong>logaritmo natural</strong> sigue una distribución Normal. Si X ~ Lognormal(μ_y, σ_y), entonces <strong>ln(X) ~ Normal(μ_y, σ_y)</strong>. Útil para modelar tiempos de vida, ingresos, tamaños.</p>
+                <p><strong>Variable aleatoria X:</strong> valor positivo cuyo logaritmo es normal.</p>
+                <p><strong>Esperanza E(X):</strong> e^(μ_y + σ_y²/2), que es diferente de μ_y.</p>
+
+                <h4>✅ Supuestos</h4>
+                <ul>
+                    <li>X solo toma valores positivos (X > 0)</li>
+                    <li>ln(X) sigue una distribución Normal(μ_y, σ_y)</li>
+                    <li>La distribución de X es asimétrica (sesgo a la derecha)</li>
+                    <li>μ_y y σ_y son la media y desviación de ln(X), NO de X</li>
+                </ul>
+
+                <h4>📐 Fórmulas</h4>
+                <div class="formula-box">
+                    <strong>Transformación:</strong> Y = ln(X) ~ Normal(μ_y, σ_y)<br>
+                    <strong>Estandarización:</strong> z = (ln(x) - μ_y) / σ_y → usar Φ(z)<br>
+                    <strong>Media de X:</strong> e^(μ_y + σ_y²/2)<br>
+                    <strong>Varianza de X:</strong> (e^(σ_y²) - 1) × e^(2μ_y + σ_y²)<br>
+                    <strong>⚠️ μ_y NO es la media de X.</strong> Es la media de ln(X).
+                </div>
+            </div>
+
+            <h3>📥 Parámetros de la distribución (del logaritmo)</h3>
+            <div class="campo-grupo">
+                <label for="logn-muy">μ_y (media de ln(X)):</label>
+                <input type="number" id="logn-muy" step="any" placeholder="Ej: 3">
+                <small>NO es la media de X. Es la media del logaritmo.</small>
+            </div>
+            <div class="campo-grupo">
+                <label for="logn-sigmay">σ_y (desviación de ln(X)):</label>
+                <input type="number" id="logn-sigmay" min="0.0001" step="any" placeholder="Ej: 0.5">
+                <small>Debe ser > 0. NO es la desviación de X.</small>
+            </div>
+
+            <hr class="separador">
+            <h3>📍 Punto de evaluación (para P(X≤x) y P(X≥x))</h3>
+            <div class="campo-grupo">
+                <label for="logn-x">x (punto):</label>
+                <input type="number" id="logn-x" min="0.0001" step="any" placeholder="Ej: 30">
+                <small>Debe ser > 0 (la Lognormal solo toma valores positivos)</small>
+            </div>
+
+            <hr class="separador">
+            <h3>📏 Intervalo (para P(c≤X≤d))</h3>
+            <div class="campo-grupo">
+                <label for="logn-c">c (límite inferior):</label>
+                <input type="number" id="logn-c" min="0.0001" step="any" placeholder="Ej: 15">
+            </div>
+            <div class="campo-grupo">
+                <label for="logn-d">d (límite superior):</label>
+                <input type="number" id="logn-d" min="0.0001" step="any" placeholder="Ej: 30">
+                <small>Debe ser mayor que c y > 0</small>
+            </div>
+
+            <div class="botones-accion">
+                <button class="btn-ejemplo" onclick="cargarEjemploLognormal()">💡 Cargar Ejemplo</button>
+                <button class="btn-calcular" onclick="calcularLognormal()">🧮 Calcular</button>
+                <button class="btn-limpiar" onclick="limpiarLognormal()">🧹 Limpiar</button>
+            </div>
+
+            <div id="error-logn" class="mensaje-error"></div>
+            <div id="exito-logn" class="mensaje-exito"></div>
+
+            <div id="resultados-lognormal" class="seccion-resultados">
+                <h3>📋 Resultados</h3>
+                <table id="tabla-lognormal" class="tabla-resultados"></table>
+            </div>
+            <div id="proc-lognormal-seccion" class="seccion-resultados">
+                <h3>📝 Procedimiento (Estandarización del ln)</h3>
+                <div id="proc-lognormal" class="procedimiento"></div>
+            </div>
+            <div id="interp-lognormal-seccion" class="seccion-resultados">
+                <h3>💬 Interpretación</h3>
+                <div id="interp-lognormal" class="mensaje-exito" style="display: block;"></div>
+            </div>
         </div>
         <div id="modulo-tlc" class="modulo" style="display: none;">
             <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 6.</div>
