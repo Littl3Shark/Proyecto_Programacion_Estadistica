@@ -505,8 +505,83 @@
                 <div id="interp-poisson" class="mensaje-exito" style="display: block;"></div>
             </div>
         </div>
+           <!-- ============================================
+              MÓDULO 6: DISTRIBUCIÓN UNIFORME CONTINUA
+           ============================================ -->
         <div id="modulo-uniforme" class="modulo" style="display: none;">
-            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
+
+            <div class="info-dist">
+                <h4>📖 Definición</h4>
+                <p>Modela una variable continua donde <strong>todos los valores en un intervalo [a, b] tienen la misma probabilidad</strong> de ocurrir. La densidad es constante dentro del intervalo y cero fuera.</p>
+                <p><strong>Variable aleatoria X:</strong> valor continuo distribuido uniformemente entre a y b.</p>
+                <p><strong>Esperanza E(X):</strong> punto medio del intervalo (a+b)/2.</p>
+
+                <h4>✅ Supuestos</h4>
+                <ul>
+                    <li>La variable toma valores continuos en [a, b]</li>
+                    <li>Todos los valores del intervalo son igualmente probables</li>
+                    <li>La densidad es f(x) = 1/(b-a) dentro del intervalo</li>
+                </ul>
+
+                <h4>📐 Fórmulas</h4>
+                <div class="formula-box">
+                    <strong>f(x)</strong> = 1/(b-a) para a ≤ x ≤ b<br>
+                    <strong>Media:</strong> μ = (a+b)/2 &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Varianza:</strong> σ² = (b-a)²/12<br>
+                    <strong>CDF:</strong> F(x) = (x-a)/(b-a)
+                </div>
+            </div>
+
+            <h3>📥 Parámetros de la distribución</h3>
+            <div class="campo-grupo">
+                <label for="uni-a">a (límite inferior):</label>
+                <input type="number" id="uni-a" step="any" placeholder="Ej: 100">
+            </div>
+            <div class="campo-grupo">
+                <label for="uni-b">b (límite superior):</label>
+                <input type="number" id="uni-b" step="any" placeholder="Ej: 500">
+                <small>Debe ser mayor que a</small>
+            </div>
+
+            <hr class="separador">
+            <h3>📍 Punto de evaluación (para P(X≤x) y P(X≥x))</h3>
+            <div class="campo-grupo">
+                <label for="uni-x">x (punto):</label>
+                <input type="number" id="uni-x" step="any" placeholder="Ej: 200">
+            </div>
+
+            <hr class="separador">
+            <h3>📏 Intervalo (para P(c≤X≤d))</h3>
+            <div class="campo-grupo">
+                <label for="uni-c">c (límite inferior del intervalo):</label>
+                <input type="number" id="uni-c" step="any" placeholder="Ej: 200">
+            </div>
+            <div class="campo-grupo">
+                <label for="uni-d">d (límite superior del intervalo):</label>
+                <input type="number" id="uni-d" step="any" placeholder="Ej: 400">
+                <small>Debe ser mayor que c</small>
+            </div>
+
+            <div class="botones-accion">
+                <button class="btn-ejemplo" onclick="cargarEjemploUniforme()">💡 Cargar Ejemplo</button>
+                <button class="btn-calcular" onclick="calcularUniforme()">🧮 Calcular</button>
+                <button class="btn-limpiar" onclick="limpiarUniforme()">🧹 Limpiar</button>
+            </div>
+
+            <div id="error-uni" class="mensaje-error"></div>
+            <div id="exito-uni" class="mensaje-exito"></div>
+
+            <div id="resultados-uniforme" class="seccion-resultados">
+                <h3>📋 Resultados</h3>
+                <table id="tabla-uniforme" class="tabla-resultados"></table>
+            </div>
+            <div id="proc-uniforme-seccion" class="seccion-resultados">
+                <h3>📝 Procedimiento</h3>
+                <div id="proc-uniforme" class="procedimiento"></div>
+            </div>
+            <div id="interp-uniforme-seccion" class="seccion-resultados">
+                <h3>💬 Interpretación</h3>
+                <div id="interp-uniforme" class="mensaje-exito" style="display: block;"></div>
+            </div>
         </div>
         <div id="modulo-normal" class="modulo" style="display: none;">
             <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
@@ -514,8 +589,82 @@
         <div id="modulo-gamma" class="modulo" style="display: none;">
             <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
         </div>
+        <!-- ============================================
+                 MÓDULO 9: DISTRIBUCIÓN EXPONENCIAL
+           ============================================ -->
         <div id="modulo-exponencial" class="modulo" style="display: none;">
-            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
+
+            <div class="info-dist">
+                <h4>📖 Definición</h4>
+                <p>Modela el <strong>tiempo entre eventos consecutivos</strong> que ocurren de forma aleatoria e independiente a una tasa constante λ. Es la versión continua de la Poisson.</p>
+                <p><strong>Variable aleatoria X:</strong> tiempo hasta el próximo evento.</p>
+                <p><strong>Esperanza E(X):</strong> tiempo promedio entre eventos = 1/λ.</p>
+
+                <h4>✅ Supuestos</h4>
+                <ul>
+                    <li>Los eventos ocurren de forma independiente</li>
+                    <li>La tasa λ es constante en el tiempo</li>
+                    <li>X solo toma valores ≥ 0</li>
+                    <li>Propiedad de "falta de memoria": el pasado no afecta el futuro</li>
+                </ul>
+
+                <h4>📐 Fórmulas</h4>
+                <div class="formula-box">
+                    <strong>f(x)</strong> = λ·e^(-λx) para x ≥ 0<br>
+                    <strong>Media:</strong> μ = 1/λ &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Varianza:</strong> σ² = 1/λ²<br>
+                    <strong>CDF:</strong> F(x) = 1 - e^(-λx)<br>
+                    <strong>⚠️ λ ≠ 1/λ:</strong> λ es la tasa, 1/λ es el tiempo promedio
+                </div>
+            </div>
+
+            <h3>📥 Parámetros de la distribución</h3>
+            <div class="campo-grupo">
+                <label for="expo-lambda">λ (tasa de ocurrencia):</label>
+                <input type="number" id="expo-lambda" min="0.0001" step="any" placeholder="Ej: 0.002">
+                <small>Debe ser > 0. Ej: 0.002 fallos por hora</small>
+            </div>
+
+            <hr class="separador">
+            <h3>📍 Punto de evaluación (para P(X≤x) y P(X≥x))</h3>
+            <div class="campo-grupo">
+                <label for="expo-x">x (punto):</label>
+                <input type="number" id="expo-x" min="0" step="any" placeholder="Ej: 200">
+                <small>Debe ser ≥ 0</small>
+            </div>
+
+            <hr class="separador">
+            <h3>📏 Intervalo (para P(c≤X≤d))</h3>
+            <div class="campo-grupo">
+                <label for="expo-c">c (límite inferior del intervalo):</label>
+                <input type="number" id="expo-c" min="0" step="any" placeholder="Ej: 200">
+            </div>
+            <div class="campo-grupo">
+                <label for="expo-d">d (límite superior del intervalo):</label>
+                <input type="number" id="expo-d" min="0" step="any" placeholder="Ej: 1000">
+                <small>Debe ser mayor que c</small>
+            </div>
+
+            <div class="botones-accion">
+                <button class="btn-ejemplo" onclick="cargarEjemploExponencial()">💡 Cargar Ejemplo</button>
+                <button class="btn-calcular" onclick="calcularExponencial()">🧮 Calcular</button>
+                <button class="btn-limpiar" onclick="limpiarExponencial()">🧹 Limpiar</button>
+            </div>
+
+            <div id="error-expo" class="mensaje-error"></div>
+            <div id="exito-expo" class="mensaje-exito"></div>
+
+            <div id="resultados-exponencial" class="seccion-resultados">
+                <h3>📋 Resultados</h3>
+                <table id="tabla-exponencial" class="tabla-resultados"></table>
+            </div>
+            <div id="proc-exponencial-seccion" class="seccion-resultados">
+                <h3>📝 Procedimiento</h3>
+                <div id="proc-exponencial" class="procedimiento"></div>
+            </div>
+            <div id="interp-exponencial-seccion" class="seccion-resultados">
+                <h3>💬 Interpretación</h3>
+                <div id="interp-exponencial" class="mensaje-exito" style="display: block;"></div>
+            </div>
         </div>
         <div id="modulo-jicuadrada" class="modulo" style="display: none;">
             <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 5.</div>
@@ -534,5 +683,6 @@
     <script src="js/descriptiva.js"></script>
     <script src="js/conteo.js"></script>
     <script src="js/discretas.js"></script>
+    <script src="js/continuas.js"></script>
 </body>
 </html>
