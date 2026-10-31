@@ -38,14 +38,12 @@
              ============================================ -->
         <div id="modulo-descriptiva" class="modulo" style="display: none;">
 
-            <!-- Descripción del módulo -->
             <div class="descripcion-modulo">
                 <strong>📖 Descripción:</strong> Calcula medidas de tendencia central, dispersión y posición
                 para datos numéricos sin agrupar. Compara la varianza poblacional (divide entre n)
                 con la varianza muestral (divide entre n-1).
             </div>
 
-            <!-- Entrada de datos -->
             <h3>📥 Datos de entrada</h3>
             <p style="color: #666; font-size: 13px;">
                 Escribe los números separados por comas, espacios o saltos de línea.
@@ -54,7 +52,6 @@
             <textarea id="datos-descriptiva"
                       placeholder="Ejemplo: 120, 135, 128, 142, 135, 130, 125, 135, 140, 122"></textarea>
 
-            <!-- Importar archivo -->
             <div class="zona-archivo">
                 📂 <strong>Importar archivo:</strong>
                 <input type="file" id="archivo-descriptiva" accept=".txt,.csv"
@@ -62,18 +59,15 @@
                 <br><small>El archivo debe contener números separados por comas, espacios o saltos de línea.</small>
             </div>
 
-            <!-- Botones de acción -->
             <div class="botones-accion">
                 <button class="btn-ejemplo" onclick="cargarEjemploDescriptiva()">💡 Cargar Ejemplo</button>
                 <button class="btn-calcular" onclick="calcularDescriptiva()">🧮 Calcular</button>
                 <button class="btn-limpiar" onclick="limpiarDescriptiva()">🧹 Limpiar</button>
             </div>
 
-            <!-- Mensajes de error y éxito -->
             <div id="error-descriptiva" class="mensaje-error"></div>
             <div id="exito-descriptiva" class="mensaje-exito"></div>
 
-            <!-- Resultados -->
             <div id="resultados-descriptiva" class="seccion-resultados">
                 <h3>📋 Resultados</h3>
                 <table id="tabla-descriptiva" class="tabla-resultados"></table>
@@ -85,13 +79,11 @@
                 </div>
             </div>
 
-            <!-- Procedimiento -->
             <div id="procedimiento-seccion" class="seccion-resultados">
                 <h3>📝 Procedimiento paso a paso</h3>
                 <div id="procedimiento-descriptiva" class="procedimiento"></div>
             </div>
 
-            <!-- Interpretación -->
             <div id="interpretacion-seccion" class="seccion-resultados">
                 <h3>💬 Interpretación</h3>
                 <div id="interpretacion-descriptiva" class="mensaje-exito" style="display: block;"></div>
@@ -100,12 +92,218 @@
         </div>
         <!-- FIN MÓDULO DESCRIPTIVA -->
 
+
         <!-- ============================================
-             MÓDULOS 2-12 (Se irán construyendo en las próximas fases)
+             MÓDULO 2: CONTEO Y PROBABILIDAD
              ============================================ -->
         <div id="modulo-conteo" class="modulo" style="display: none;">
-            <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 3.</div>
+
+            <div class="descripcion-modulo">
+                <strong>📖 Descripción:</strong> Herramientas de conteo y reglas de probabilidad.
+                Incluye combinaciones, unión de eventos, probabilidad condicional y Teorema de Bayes.
+                Cada sub-sección muestra entradas, procedimiento y resultado.
+            </div>
+
+            <!-- PESTAÑAS INTERNAS -->
+            <div class="pestanas">
+                <button class="pestana activa" onclick="cambiarPestana('combinaciones')">🔢 Combinaciones</button>
+                <button class="pestana" onclick="cambiarPestana('union')">➕ Unión</button>
+                <button class="pestana" onclick="cambiarPestana('condicional')">🔗 Condicional</button>
+                <button class="pestana" onclick="cambiarPestana('bayes')">📐 Bayes</button>
+            </div>
+
+            <!-- Mensajes globales del módulo -->
+            <div id="error-conteo" class="mensaje-error"></div>
+            <div id="exito-conteo" class="mensaje-exito"></div>
+
+            <!-- ===== PESTAÑA 1: COMBINACIONES ===== -->
+            <div id="pestana-combinaciones" class="contenido-pestana visible">
+                <h3>Combinaciones: C(n, k)</h3>
+                <p style="color: #666; font-size: 13px;">
+                    Calcula de cuántas formas se pueden elegir k elementos de un conjunto de n elementos,
+                    donde el orden NO importa.
+                </p>
+
+                <div class="campo-grupo">
+                    <label for="comb-n">n (total de elementos):</label>
+                    <input type="number" id="comb-n" min="0" step="1" placeholder="Ej: 10">
+                    <small>Número entero ≥ 0</small>
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="comb-k">k (elementos a elegir):</label>
+                    <input type="number" id="comb-k" min="0" step="1" placeholder="Ej: 3">
+                    <small>Número entero ≥ 0, no mayor que n</small>
+                </div>
+
+                <div class="botones-accion">
+                    <button class="btn-ejemplo" onclick="cargarEjemploCombinaciones()">💡 Cargar Ejemplo</button>
+                    <button class="btn-calcular" onclick="calcularCombinaciones()">🧮 Calcular</button>
+                    <button class="btn-limpiar" onclick="limpiarCombinaciones()">🧹 Limpiar</button>
+                </div>
+
+                <div id="resultado-combinaciones" class="resultado-conteo"></div>
+
+                <div id="resultados-combinaciones" class="seccion-resultados">
+                    <h3>📝 Procedimiento</h3>
+                    <div id="proc-combinaciones" class="procedimiento"></div>
+                    <h3>💬 Interpretación</h3>
+                    <div id="interp-combinaciones" class="mensaje-exito" style="display: block;"></div>
+                </div>
+            </div>
+
+            <!-- ===== PESTAÑA 2: UNIÓN ===== -->
+            <div id="pestana-union" class="contenido-pestana">
+                <h3>Unión de dos eventos: P(A∪B)</h3>
+                <p style="color: #666; font-size: 13px;">
+                    Probabilidad de que ocurra A, B, o ambos. Se resta la intersección para no contarla dos veces.
+                </p>
+
+                <div class="campo-grupo">
+                    <label for="union-pa">P(A) - Probabilidad del evento A:</label>
+                    <input type="number" id="union-pa" min="0" max="1" step="0.01" placeholder="Ej: 0.15">
+                    <small>Número entre 0 y 1</small>
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="union-pb">P(B) - Probabilidad del evento B:</label>
+                    <input type="number" id="union-pb" min="0" max="1" step="0.01" placeholder="Ej: 0.10">
+                    <small>Número entre 0 y 1</small>
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="union-pab">P(A∩B) - Probabilidad de ambos:</label>
+                    <input type="number" id="union-pab" min="0" max="1" step="0.01" placeholder="Ej: 0.05">
+                    <small>Debe ser ≤ P(A) y ≤ P(B)</small>
+                </div>
+
+                <div class="botones-accion">
+                    <button class="btn-ejemplo" onclick="cargarEjemploUnion()">💡 Cargar Ejemplo</button>
+                    <button class="btn-calcular" onclick="calcularUnion()">🧮 Calcular</button>
+                    <button class="btn-limpiar" onclick="limpiarUnion()">🧹 Limpiar</button>
+                </div>
+
+                <div id="resultado-union" class="resultado-conteo"></div>
+
+                <div id="resultados-union" class="seccion-resultados">
+                    <h3>📝 Procedimiento</h3>
+                    <div id="proc-union" class="procedimiento"></div>
+                    <h3>💬 Interpretación</h3>
+                    <div id="interp-union" class="mensaje-exito" style="display: block;"></div>
+                </div>
+            </div>
+
+            <!-- ===== PESTAÑA 3: CONDICIONAL ===== -->
+            <div id="pestana-condicional" class="contenido-pestana">
+                <h3>Probabilidad condicional: P(A|B)</h3>
+                <p style="color: #666; font-size: 13px;">
+                    Probabilidad de que ocurra A dado que B ya ocurrió.
+                </p>
+
+                <div class="campo-grupo">
+                    <label for="cond-pab">P(A∩B) - Probabilidad de ambos:</label>
+                    <input type="number" id="cond-pab" min="0" max="1" step="0.01" placeholder="Ej: 0.05">
+                    <small>Número entre 0 y 1</small>
+                </div>
+
+                <div class="campo-grupo">
+                    <label for="cond-pb">P(B) - Probabilidad del evento dado:</label>
+                    <input type="number" id="cond-pb" min="0" max="1" step="0.01" placeholder="Ej: 0.10">
+                    <small>Debe ser > 0</small>
+                </div>
+
+                <div class="botones-accion">
+                    <button class="btn-ejemplo" onclick="cargarEjemploCondicional()">💡 Cargar Ejemplo</button>
+                    <button class="btn-calcular" onclick="calcularCondicional()">🧮 Calcular</button>
+                    <button class="btn-limpiar" onclick="limpiarCondicional()">🧹 Limpiar</button>
+                </div>
+
+                <div id="resultado-condicional" class="resultado-conteo"></div>
+
+                <div id="resultados-condicional" class="seccion-resultados">
+                    <h3>📝 Procedimiento</h3>
+                    <div id="proc-condicional" class="procedimiento"></div>
+                    <h3>💬 Interpretación</h3>
+                    <div id="interp-condicional" class="mensaje-exito" style="display: block;"></div>
+                </div>
+            </div>
+
+            <!-- ===== PESTAÑA 4: BAYES ===== -->
+            <div id="pestana-bayes" class="contenido-pestana">
+                <h3>Teorema de Bayes</h3>
+                <p style="color: #666; font-size: 13px;">
+                    Calcula probabilidades posteriores P(Ai|B) para 3 hipótesis mutuamente excluyentes.
+                    Las probabilidades previas P(Ai) deben sumar 1.
+                </p>
+
+                <!-- Hipótesis 1 -->
+                <div class="fila-bayes">
+                    <strong style="align-self: center; min-width: 30px;">A1:</strong>
+                    <div class="campo-grupo">
+                        <label for="bayes-pa1">P(A1):</label>
+                        <input type="number" id="bayes-pa1" min="0" max="1" step="0.01" placeholder="0.50">
+                    </div>
+                    <div class="campo-grupo">
+                        <label for="bayes-pba1">P(B|A1):</label>
+                        <input type="number" id="bayes-pba1" min="0" max="1" step="0.01" placeholder="0.01">
+                    </div>
+                </div>
+
+                <!-- Hipótesis 2 -->
+                <div class="fila-bayes">
+                    <strong style="align-self: center; min-width: 30px;">A2:</strong>
+                    <div class="campo-grupo">
+                        <label for="bayes-pa2">P(A2):</label>
+                        <input type="number" id="bayes-pa2" min="0" max="1" step="0.01" placeholder="0.30">
+                    </div>
+                    <div class="campo-grupo">
+                        <label for="bayes-pba2">P(B|A2):</label>
+                        <input type="number" id="bayes-pba2" min="0" max="1" step="0.01" placeholder="0.02">
+                    </div>
+                </div>
+
+                <!-- Hipótesis 3 -->
+                <div class="fila-bayes">
+                    <strong style="align-self: center; min-width: 30px;">A3:</strong>
+                    <div class="campo-grupo">
+                        <label for="bayes-pa3">P(A3):</label>
+                        <input type="number" id="bayes-pa3" min="0" max="1" step="0.01" placeholder="0.20">
+                    </div>
+                    <div class="campo-grupo">
+                        <label for="bayes-pba3">P(B|A3):</label>
+                        <input type="number" id="bayes-pba3" min="0" max="1" step="0.01" placeholder="0.05">
+                    </div>
+                </div>
+
+                <div class="botones-accion">
+                    <button class="btn-ejemplo" onclick="cargarEjemploBayes()">💡 Cargar Ejemplo</button>
+                    <button class="btn-calcular" onclick="calcularBayes()">🧮 Calcular</button>
+                    <button class="btn-limpiar" onclick="limpiarBayes()">🧹 Limpiar</button>
+                </div>
+
+                <div id="resultados-bayes" class="seccion-resultados">
+                    <h3>📋 Resultados</h3>
+                    <table id="tabla-bayes" class="tabla-resultados"></table>
+                </div>
+
+                <div id="proc-bayes-seccion" class="seccion-resultados">
+                    <h3>📝 Procedimiento</h3>
+                    <div id="proc-bayes" class="procedimiento"></div>
+                </div>
+
+                <div id="interp-bayes-seccion" class="seccion-resultados">
+                    <h3>💬 Interpretación</h3>
+                    <div id="interp-bayes" class="mensaje-exito" style="display: block;"></div>
+                </div>
+            </div>
+
         </div>
+        <!-- FIN MÓDULO CONTEO -->
+
+
+        <!-- ============================================
+             MÓDULOS 3-12 (Próximas fases)
+             ============================================ -->
         <div id="modulo-binomial" class="modulo" style="display: none;">
             <div class="descripcion-modulo">🔧 Módulo en construcción. Se desarrollará en la Fase 4.</div>
         </div>
@@ -142,5 +340,6 @@
     <!-- Cargar los scripts de JavaScript -->
     <script src="js/app.js"></script>
     <script src="js/descriptiva.js"></script>
+    <script src="js/conteo.js"></script>
 </body>
 </html>
