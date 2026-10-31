@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Guía de Uso - Aplicación Estadística</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 10px;
+            color: #333;
+            padding: 15px 20px;
+            line-height: 1.4;
+        }
+        h1 {
+            font-size: 15px;
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #1abc9c;
+            padding-bottom: 5px;
+            margin-bottom: 8px;
+        }
+        .subtitulo {
+            text-align: center;
+            font-size: 9px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .dos-columnas {
+            display: flex;
+            gap: 15px;
+        }
+        .columna { flex: 1; }
+        h2 {
+            font-size: 11px;
+            color: #fff;
+            background-color: #2c3e50;
+            padding: 3px 8px;
+            border-radius: 3px;
+            margin: 8px 0 4px 0;
+        }
+        h2:first-child { margin-top: 0; }
+        ol, ul {
+            margin-left: 16px;
+            margin-bottom: 4px;
+        }
+        li { margin-bottom: 2px; }
+        .paso-num {
+            display: inline-block;
+            background-color: #1abc9c;
+            color: white;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 9px;
+            font-weight: bold;
+            line-height: 14px;
+            margin-right: 3px;
+        }
+        .caja {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 6px 8px;
+            margin: 4px 0;
+            background-color: #f9f9f9;
+        }
+        .caja-verde {
+            border-left: 3px solid #27ae60;
+            background-color: #eafaf1;
+            padding: 5px 8px;
+            margin: 4px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .caja-naranja {
+            border-left: 3px solid #f39c12;
+            background-color: #fef9e7;
+            padding: 5px 8px;
+            margin: 4px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .caja-roja {
+            border-left: 3px solid #e74c3c;
+            background-color: #fdedec;
+            padding: 5px 8px;
+            margin: 4px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .boton {
+            display: inline-block;
+            padding: 1px 6px;
+            border-radius: 3px;
+            color: white;
+            font-size: 9px;
+            font-weight: bold;
+        }
+        .btn-verde { background-color: #27ae60; }
+        .btn-rojo { background-color: #e74c3c; }
+        .btn-naranja { background-color: #f39c12; }
+        .btn-azul { background-color: #3498db; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9px;
+            margin: 4px 0;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 2px 5px;
+            text-align: left;
+        }
+        th { background-color: #2c3e50; color: white; }
+        .footer {
+            text-align: center;
+            font-size: 8px;
+            color: #999;
+            margin-top: 8px;
+            border-top: 1px solid #ccc;
+            padding-top: 4px;
+        }
+        code {
+            font-family: Consolas, monospace;
+            background-color: #eee;
+            padding: 0 3px;
+            border-radius: 2px;
+            font-size: 9px;
+        }
+        @media print {
+            body { padding: 10px; font-size: 9px; }
+            h1 { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>📊 Guía de Uso – Aplicación Estadística</h1>
+<p class="subtitulo">Proyecto Final Estadística I · Ingeniería en Sistemas · Funciona sin internet · Se abre con doble clic</p>
+
+<div class="dos-columnas">
+
+<!-- COLUMNA IZQUIERDA -->
+<div class="columna">
+
+<h2>1. Requisitos</h2>
+<ul>
+    <li>Computadora con Windows, Mac o Linux</li>
+    <li>Navegador web (Chrome, Firefox, Edge)</li>
+    <li><strong>No se necesita internet</strong>, ni instalaciones, ni cuentas</li>
+</ul>
+
+<h2>2. Abrir la aplicación</h2>
+<ol>
+    <li><span class="paso-num">1</span> Descomprima la carpeta del proyecto</li>
+    <li><span class="paso-num">2</span> Busque el archivo <code>ABRIR.html</code></li>
+    <li><span class="paso-num">3</span> Haga <strong>doble clic</strong> sobre él</li>
+    <li><span class="paso-num">4</span> Se abrirá automáticamente en su navegador</li>
+</ol>
+<div class="caja-verde">
+    ✅ Si el navegador no se abre automáticamente: clic derecho → <strong>Abrir con</strong> → Elija Chrome/Firefox/Edge
+</div>
+
+<h2>3. Elegir un módulo</h2>
+<ol>
+    <li>En el <strong>menú lateral izquierdo</strong> verá 12 módulos</li>
+    <li>Haga clic en el módulo deseado (se ilumina en verde)</li>
+    <li>El contenido del módulo aparece en el área derecha</li>
+</ol>
+
+<div class="caja">
+    <strong>Módulos disponibles:</strong><br>
+    1. Descriptiva · 2. Conteo y prob. · 3. Binomial · 4. Hipergeométrica · 5. Poisson · 6. Uniforme cont. · 7. Normal · 8. Gamma · 9. Exponencial · 10. Ji cuadrada · 11. Lognormal · 12. TLC
+</div>
+
+<h2>4. Ingresar datos y calcular</h2>
+<ol>
+    <li><span class="paso-num">1</span> Lea la <strong>descripción del módulo</strong> (caja azul superior) para entender parámetros y supuestos</li>
+    <li><span class="paso-num">2</span> Opción A: Presione <span class="boton btn-naranja">💡 Cargar Ejemplo</span> para llenar datos automáticamente</li>
+    <li><span class="paso-num">2</span> Opción B: Escriba sus propios datos en los campos</li>
+    <li><span class="paso-num">3</span> Presione <span class="boton btn-verde">🧮 Calcular</span></li>
+    <li><span class="paso-num">4</span> Lea los resultados en las secciones inferiores</li>
+</ol>
+
+<h2>5. Leer el resultado</h2>
+<p>Cada cálculo muestra <strong>4 secciones</strong>:</p>
+<table>
+    <tr><th>Sección</th><th>Contenido</th></tr>
+    <tr><td>📋 Resultados</td><td>Tabla con todos los valores calculados</td></tr>
+    <tr><td>📝 Procedimiento</td><td>Fórmulas y pasos intermedios</td></tr>
+    <tr><td>💬 Interpretación</td><td>Explicación del significado en contexto</td></tr>
+    <tr><td>⚠️ Nota</td><td>Aclaraciones (ej: varianza poblacional vs muestral)</td></tr>
+</table>
+
+</div>
+
+<!-- COLUMNA DERECHA -->
+<div class="columna">
+
+<h2>6. Botones disponibles</h2>
+<table>
+    <tr><th>Botón</th><th>Función</th></tr>
+    <tr><td><span class="boton btn-naranja">💡 Cargar Ejemplo</span></td><td>Llena los campos con un caso precargado de Ing. en Sistemas</td></tr>
+    <tr><td><span class="boton btn-verde">🧮 Calcular</span></td><td>Procesa los datos y muestra resultados, procedimiento e interpretación</td></tr>
+    <tr><td><span class="boton btn-rojo">🧹 Limpiar</span></td><td>Borra todos los campos y resultados para empezar de nuevo</td></tr>
+</table>
+
+<h2>7. Cambiar un dato y recalcular</h2>
+<ol>
+    <li>Modifique cualquier campo de entrada</li>
+    <li>Presione <span class="boton btn-verde">🧮 Calcular</span> nuevamente</li>
+    <li>Los resultados se actualizan automáticamente</li>
+</ol>
+<div class="caja-verde">
+    ✅ No es necesario recargar la página. Puede calcular cuantas veces desee.
+</div>
+
+<h2>8. Importar archivo de datos</h2>
+<p>Disponible en el módulo <strong>Descriptiva</strong>:</p>
+<ol>
+    <li>En la zona "📂 Importar archivo", haga clic en <strong>Seleccionar archivo</strong></li>
+    <li>Elija un archivo <code>.txt</code> o <code>.csv</code></li>
+    <li>El archivo debe contener números separados por comas, espacios o saltos de línea</li>
+    <li>Los datos se cargan automáticamente en el campo de texto</li>
+    <li>Presione <span class="boton btn-verde">🧮 Calcular</span></li>
+</ol>
+
+<h2>9. Entradas inválidas</h2>
+<p>La aplicación detecta errores y muestra mensajes claros <strong>sin cerrarse</strong>:</p>
+<div class="caja-roja">
+    ⚠️ <strong>Ejemplo:</strong> Si escribe "hola" en un campo numérico, aparecerá:<br>
+    <em>"Se encontraron valor(es) no numérico(s). Solo se permiten números."</em>
+</div>
+<ul>
+    <li>Corrija el dato y presione Calcular nuevamente</li>
+    <li>La aplicación nunca se bloquea ni pierde datos</li>
+</ul>
+
+<h2>10. Formato de datos aceptados</h2>
+<table>
+    <tr><th>Módulo</th><th>Formato de entrada</th></tr>
+    <tr><td>Descriptiva</td><td>Números separados por comas, espacios o saltos de línea</td></tr>
+    <tr><td>Conteo / Prob.</td><td>Valores numéricos en campos individuales (0 a 1 para probabilidades)</td></tr>
+    <tr><td>Binomial</td><td>n (entero ≥1), p (0 a 1), k (entero 0 a n)</td></tr>
+    <tr><td>Hipergeométrica</td><td>N, K, n, k (enteros positivos con K≤N, n≤N)</td></tr>
+    <tr><td>Poisson</td><td>λ (>0), intervalo (>0), k (entero ≥0)</td></tr>
+    <tr><td>Continuas</td><td>Parámetros positivos; x, c, d según el rango de cada distribución</td></tr>
+    <tr><td>TLC</td><td>μ, σ (>0), n (entero ≥2), puntos de evaluación</td></tr>
+</table>
+
+<h2>11. Estructura de la carpeta</h2>
+<div class="caja">
+    <code>📁 Proyecto_Estadistica/</code><br>
+    ├── <code>ABRIR.html</code> ← <strong>Abrir este archivo (doble clic)</strong><br>
+    ├── <code>📁 js/</code> ← Lógica de cálculos<br>
+    ├── <code>📁 css/</code> ← Estilos visuales<br>
+    └── <code>📁 docs/</code> ← Esta guía + pruebas
+</div>
+
+<div class="caja-naranja">
+    💡 <strong>Consejo para la demostración:</strong> Siga este flujo: Descomprimir → Doble clic en ABRIR.html → Elegir módulo → Cargar Ejemplo → Calcular → Cambiar un dato → Calcular de nuevo → Probar entrada inválida → Verificar mensaje de error.
+</div>
+
+</div>
+</div>
+
+<div class="footer">
+    Aplicación Estadística · Proyecto Final Estadística I · Ingeniería en Sistemas · Octubre 2026<br>
+    Funciona 100% sin internet · Todos los cálculos se ejecutan localmente en el navegador · No requiere instalación
+</div>
+
+</body>
+</html>
